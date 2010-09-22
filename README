@@ -1,0 +1,2 @@
+A one-liner to provide benchmarking for your favorite JS REPL:
+var bench=function(n,f){var s=+new Date(),c=f?n+1:2,f=f||n;while(--c)f();return +new Date()-s};
