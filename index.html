@@ -1863,6 +1863,55 @@ benchmark(function () {
 });
 </script>
 
+<script type='example' name='1M (int, int) CPS closures (direct)'>
+for (var pairs = [], i = 0; i < 1 * million; ++i)
+  pairs.push((function (left, right) {
+    return function (f) {
+      return f(left, right);
+    };
+  })(i, i + 1));
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = pairs.length; i < l; ++i)
+    total += pairs[i](function (left, right) {
+      return right - left;
+    });
+  return total;
+});
+</script>
+
+<script type='example' name='1M (int, int) CPS closures (inline)'>
+for (var pairs = [], i = 0; i < 1 * million; ++i)
+  pairs.push((function (left, right) {
+    return function (f) {
+      return f(right - left);
+    };
+  })(i, i + 1));
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = pairs.length; i < l; ++i)
+    total += pairs[i](function (x) {
+      return x;
+    });
+  return total;
+});
+</script>
+
+<script type='example' name='1M (int, int) closures (inline)'>
+for (var pairs = [], i = 0; i < 1 * million; ++i)
+  pairs.push((function (left, right) {
+    return function () {
+      return right - left;
+    };
+  })(i, i + 1));
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = pairs.length; i < l; ++i)
+    total += pairs[i]();
+  return total;
+});
+</script>
+
 <script type='example' name='1M (float, float) array pairs (uncached)'>
 for (var pairs = [], i = 0, l = 1 * million; i < l; ++i)
   pairs.push([i + 0.1, i + 1.1]);
@@ -1971,6 +2020,55 @@ benchmark(function () {
   return total;
 });
 </script>
+
+<script type='example' name='1M (float, float) CPS closures (direct)'>
+for (var pairs = [], i = 0; i < 1 * million; ++i)
+  pairs.push((function (left, right) {
+    return function (f) {
+      return f(left, right);
+    };
+  })(i + 0.1, i + 1.1));
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = pairs.length; i < l; ++i)
+    total += pairs[i](function (left, right) {
+      return right - left;
+    });
+  return total;
+});
+</script>
+
+<script type='example' name='1M (float, float) CPS closures (inline)'>
+for (var pairs = [], i = 0; i < 1 * million; ++i)
+  pairs.push((function (left, right) {
+    return function (f) {
+      return f(right - left);
+    };
+  })(i + 0.1, i + 1.1));
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = pairs.length; i < l; ++i)
+    total += pairs[i](function (x) {
+      return x;
+    });
+  return total;
+});
+</script>
+
+<script type='example' name='1M (float, float) closures (inline)'>
+for (var pairs = [], i = 0; i < 1 * million; ++i)
+  pairs.push((function (left, right) {
+    return function () {
+      return right - left;
+    };
+  })(i + 0.1, i + 1.1));
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = pairs.length; i < l; ++i)
+    total += pairs[i]();
+  return total;
+});
+</script>
 </div>
 
 <div name='String cons trees'>
@@ -2031,6 +2129,65 @@ benchmark(function () {
   return /(.)ipt!/.exec(result);
 });
 </script>
+
+<script type='example' name='10M x 1 join construct'>
+benchmark(function () {
+  for (var pieces = [], i = 0, l = 10 * million; i < l; ++i)
+    pieces.push('J');
+  return pieces.join('');
+});
+</script>
+
+<script type='example' name='10M x 1 += construct'>
+benchmark(function () {
+  for (var result = '', i = 0, l = 10 * million; i < l; ++i)
+    result += 'J';
+  return result;
+});
+</script>
+
+<script type='example' name='10M x 1 join search'>
+for (var pieces = [], i = 0, l = 10 * million; i < l; ++i)
+  pieces.push('J');
+
+var s = pieces.join('') + '!';
+
+benchmark(function () {
+  return s.indexOf('J!');
+});
+</script>
+
+<script type='example' name='10M x 1 += search'>
+for (var result = '', i = 0, l = 10 * million; i < l; ++i)
+  result += 'J';
+result += '!';
+
+benchmark(function () {
+  return result.indexOf('J!');
+});
+</script>
+
+<script type='example' name='10M x 1 join regexp'>
+for (var pieces = [], i = 0, l = 10 * million; i < l; ++i)
+  pieces.push('J');
+
+var s = pieces.join('') + '!';
+
+benchmark(function () {
+  return /(.)J!/.exec(s);
+});
+</script>
+
+<script type='example' name='10M x 1 += regexp'>
+for (var result = '', i = 0, l = 10 * million; i < l; ++i)
+  result += 'J';
+result += '!';
+
+benchmark(function () {
+  return /(.)J!/.exec(result);
+});
+</script>
+
 </div>
 
 <div name='GC'>
