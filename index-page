@@ -1626,14 +1626,20 @@ meta::sdoc('index.html', <<'__');
   <div id='builtins'>
 
 <div name='Numerical computation'>
+<script type='example' name='Integer assignment'>
+benchmark(function () {
+  for (var iteration = 0; iteration < 1000; ++iteration)
+    for (var total = 0, i = 0, l = 10 * thousand; i < l; ++i)
+      total = i;
+  return total;
+});
+</script>
+
 <script type='example' name='Integer addition'>
 benchmark(function () {
   for (var iteration = 0; iteration < 1000; ++iteration)
     for (var total = 0, i = 0, l = 10 * thousand; i < l; ++i)
       total += 2;
-
-  // Return total just in case V8 is smart enough to
-  // see that we're not using its value otherwise.
   return total;
 });
 </script>
@@ -2665,6 +2671,594 @@ benchmark(function () {
     total += o[i & 1 ? 'foo' : 'boo'];
   }
   return total;
+});
+</script>
+</div>
+
+<div name='Allocating large structures'>
+<script type='example' name='Array of 1M integers using push()'>
+benchmark(function () {
+  for (var xs = [], i = 0, l = 1 * million; i < l; ++i)
+    xs.push(i);
+  return xs;
+});
+</script>
+
+<script type='example' name='Array of 1M integers using []='>
+benchmark(function () {
+  for (var xs = [], i = 0, l = 1 * million; i < l; ++i)
+    xs[i] = i;
+  return xs;
+});
+</script>
+
+<script type='example' name='Array of 1M empty strings'>
+benchmark(function () {
+  for (var xs = [], i = 0, l = 1 * million; i < l; ++i)
+    xs.push('');
+  return xs;
+});
+</script>
+
+<script type='example' name='Array of 1M 10-char strings'>
+benchmark(function () {
+  for (var xs = [], i = 0, l = 1 * million; i < l; ++i)
+    xs.push('Javascript');
+  return xs;
+});
+</script>
+
+<script type='example' name='Array of 1M floats using push()'>
+benchmark(function () {
+  for (var xs = [], i = 0, l = 1 * million; i < l; ++i)
+    xs.push(i + 0.1);
+  return xs;
+});
+</script>
+
+<script type='example' name='Array of 1M floats using []='>
+benchmark(function () {
+  for (var xs = [], i = 0, l = 1 * million; i < l; ++i)
+    xs[i] = i + 0.1;
+  return xs;
+});
+</script>
+
+<script type='example' name='Array of 10M integers using push()'>
+benchmark(function () {
+  for (var xs = [], i = 0, l = 10 * million; i < l; ++i)
+    xs.push(i);
+  return xs;
+});
+</script>
+
+<script type='example' name='Array of 10M integers using []='>
+benchmark(function () {
+  for (var xs = [], i = 0, l = 10 * million; i < l; ++i)
+    xs[i] = i;
+  return xs;
+});
+</script>
+
+<script type='example' name='Array of 10M floats using push()'>
+benchmark(function () {
+  for (var xs = [], i = 0, l = 10 * million; i < l; ++i)
+    xs.push(i + 0.1);
+  return xs;
+});
+</script>
+
+<script type='example' name='Array of 10M floats using []='>
+benchmark(function () {
+  for (var xs = [], i = 0, l = 10 * million; i < l; ++i)
+    xs[i] = i + 0.1;
+  return xs;
+});
+</script>
+
+<script type='example' name='Array of 10M empty strings'>
+benchmark(function () {
+  for (var xs = [], i = 0, l = 10 * million; i < l; ++i)
+    xs.push('');
+  return xs;
+});
+</script>
+
+<script type='example' name='Array of 10M 10-char strings'>
+benchmark(function () {
+  for (var xs = [], i = 0, l = 10 * million; i < l; ++i)
+    xs.push('Javascript');
+  return xs;
+});
+</script>
+
+<script type='example' name='Object with 1M int -> int'>
+benchmark(function () {
+  for (var o = {}, i = 0, l = 1 * million; i < l; ++i)
+    o[i] = i;
+  return o;
+});
+</script>
+
+<script type='example' name='Object with 1M int -> float'>
+benchmark(function () {
+  for (var o = {}, i = 0, l = 1 * million; i < l; ++i)
+    o[i] = i + 0.1;
+  return o;
+});
+</script>
+
+<script type='example' name='Object with 1M string -> int'>
+benchmark(function () {
+  for (var o = {}, i = 0, l = 1 * million; i < l; ++i)
+    o[i.toString()] = i;
+  return o;
+});
+</script>
+
+<script type='example' name='Object with 1M string -> float'>
+benchmark(function () {
+  for (var o = {}, i = 0, l = 1 * million; i < l; ++i)
+    o[i.toString()] = i + 0.1;
+  return o;
+});
+</script>
+
+<script type='example' name='Object with 1M hex-string -> int'>
+benchmark(function () {
+  for (var o = {}, i = 0, l = 1 * million; i < l; ++i)
+    o[i.toString(16)] = i;
+  return o;
+});
+</script>
+
+<script type='example' name='Object with 1M hex-string -> float'>
+benchmark(function () {
+  for (var o = {}, i = 0, l = 1 * million; i < l; ++i)
+    o[i.toString(16)] = i + 0.1;
+  return o;
+});
+</script>
+</div>
+
+<div name='Allocating small structures'>
+<script type='example' name='1M (int, int) pairs as array literals'>
+benchmark(function () {
+  var pair = null;
+  for (var i = 0, l = 1 * million; i < l; ++i)
+    pair = [i, i + 1];
+  return pair;
+});
+</script>
+
+<script type='example' name='1M (int, int) pairs as constructed arrays'>
+benchmark(function () {
+  var pair = null;
+  for (var i = 0, l = 1 * million; i < l; ++i) {
+    pair = new Array();
+    pair.push(i);
+    pair.push(i + 1);
+  }
+  return pair;
+});
+</script>
+
+<script type='example' name='1M (int, int) pairs as constructed arrays (2)'>
+benchmark(function () {
+  var pair = null;
+  for (var i = 0, l = 1 * million; i < l; ++i) {
+    pair = new Array();
+    pair.push(i, i + 1);
+  }
+  return pair;
+});
+</script>
+
+<script type='example' name='1M (int, int) pairs as object literals'>
+benchmark(function () {
+  var pair = null;
+  for (var i = 0, l = 1 * million; i < l; ++i)
+    pair = {left: i, right: i + 1};
+  return pair;
+});
+</script>
+
+<script type='example' name='1M (int, int) pairs as constructed objects'>
+benchmark(function () {
+  var pair = null;
+  for (var i = 0, l = 1 * million; i < l; ++i) {
+    pair = {};
+    pair.left = i;
+    pair.right = i + 1;
+  }
+  return pair;
+});
+</script>
+
+<script type='example' name='1M (int, int) pairs as constructor instances'>
+var pair_constructor = function (left, right) {
+  this.left = left;
+  this.right = right;
+};
+
+benchmark(function () {
+  var pair = null;
+  for (var i = 0, l = 1 * million; i < l; ++i)
+    pair = new pair_constructor(i, i + 1);
+  return pair;
+});
+</script>
+
+<script type='example' name='1M (int, int) pairs as 2-ary CPS closures'>
+benchmark(function () {
+  var pair = null;
+  for (var i = 0, l = 1 * million; i < l; ++i)
+    pair = (function (left, right) {
+      return function (f) {
+        return f(left, right);
+      };
+    })(i, i + 1);
+  return pair;
+});
+</script>
+
+<script type='example' name='1M (float, float) pairs as array literals'>
+benchmark(function () {
+  var pair = null;
+  for (var i = 0, l = 1 * million; i < l; ++i)
+    pair = [i + 0.1, i + 1.1];
+  return pair;
+});
+</script>
+
+<script type='example' name='1M (float, float) pairs as constructed arrays'>
+benchmark(function () {
+  var pair = null;
+  for (var i = 0, l = 1 * million; i < l; ++i) {
+    pair = new Array();
+    pair.push(i + 0.1);
+    pair.push(i + 1.1);
+  }
+  return pair;
+});
+</script>
+
+<script type='example' name='1M (float, float) pairs as constructed arrays (2)'>
+benchmark(function () {
+  var pair = null;
+  for (var i = 0, l = 1 * million; i < l; ++i) {
+    pair = new Array();
+    pair.push(i + 0.1, i + 1.1);
+  }
+  return pair;
+});
+</script>
+
+<script type='example' name='1M (float, float) pairs as object literals'>
+benchmark(function () {
+  var pair = null;
+  for (var i = 0, l = 1 * million; i < l; ++i)
+    pair = {left: i + 0.1, right: i + 1.1};
+  return pair;
+});
+</script>
+
+<script type='example' name='1M (float, float) pairs as constructed objects'>
+benchmark(function () {
+  var pair = null;
+  for (var i = 0, l = 1 * million; i < l; ++i) {
+    pair = {};
+    pair.left = i + 0.1;
+    pair.right = i + 1.1;
+  }
+  return pair;
+});
+</script>
+
+<script type='example' name='1M (float, float) pairs as constructor instances'>
+var pair_constructor = function (left, right) {
+  this.left = left;
+  this.right = right;
+};
+
+benchmark(function () {
+  var pair = null;
+  for (var i = 0, l = 1 * million; i < l; ++i)
+    pair = new pair_constructor(i + 0.1, i + 1.1);
+  return pair;
+});
+</script>
+
+<script type='example' name='1M (float, float) pairs as 2-ary CPS closures'>
+benchmark(function () {
+  var pair = null;
+  for (var i = 0, l = 1 * million; i < l; ++i)
+    pair = (function (left, right) {
+      return function (f) {
+        return f(left, right);
+      };
+    })(i + 0.1, i + 1.1);
+  return pair;
+});
+</script>
+</div>
+
+<div name='Accessing small structures'>
+<script type='example' name='1M (int, int) array pairs (uncached)'>
+for (var pairs = [], i = 0, l = 1 * million; i < l; ++i)
+  pairs.push([i, i + 1]);
+
+benchmark(function () {
+  var total = 0;
+  for (var i = 0, l = pairs.length; i < l; ++i)
+    total += pairs[i][1] - pairs[i][0];
+  return total;
+});
+</script>
+
+<script type='example' name='1M (int, int) array pairs (cached)'>
+for (var pairs = [], i = 0, l = 1 * million; i < l; ++i)
+  pairs.push([i, i + 1]);
+
+benchmark(function () {
+  var total = 0;
+  for (var i = 0, l = pairs.length, pair; i < l; ++i) {
+    pair = pairs[i];
+    total += pair[1] - pair[0];
+  }
+  return total;
+});
+</script>
+
+<script type='example' name='1M (int, int) object pairs'>
+for (var pairs = [], i = 0, l = 1 * million; i < l; ++i)
+  pairs.push({left: i, right: i + 1});
+
+benchmark(function () {
+  var total = 0;
+  for (var i = 0, l = pairs.length, pair; i < l; ++i) {
+    pair = pairs[i];
+    total += pair.right - pair.left;
+  }
+  return total;
+});
+</script>
+
+<script type='example' name='1M (int, int) instance pairs'>
+var pair_constructor = function (left, right) {
+  this.left = left;
+  this.right = right;
+};
+
+for (var pairs = [], i = 0, l = 1 * million; i < l; ++i)
+  pairs.push(new pair_constructor(i, i + 1));
+
+benchmark(function () {
+  var total = 0;
+  for (var i = 0, l = pairs.length, pair; i < l; ++i) {
+    pair = pairs[i];
+    total += pair.right - pair.left;
+  }
+  return total;
+});
+</script>
+
+<script type='example' name='1M (int, int) instance pairs (getters)'>
+var pair_constructor = function (left, right) {
+  this.left = left;
+  this.right = right;
+};
+
+pair_constructor.prototype.get_left = function () {
+  return this.left;
+};
+
+pair_constructor.prototype.get_right = function () {
+  return this.right;
+};
+
+for (var pairs = [], i = 0, l = 1 * million; i < l; ++i)
+  pairs.push(new pair_constructor(i, i + 1));
+
+benchmark(function () {
+  var total = 0;
+  for (var i = 0, l = pairs.length, pair; i < l; ++i) {
+    pair = pairs[i];
+    total += pair.get_right() - pair.get_left();
+  }
+  return total;
+});
+</script>
+
+<script type='example' name='1M (int, int) instance pairs (method)'>
+var pair_constructor = function (left, right) {
+  this.left = left;
+  this.right = right;
+};
+
+pair_constructor.prototype.diff = function () {
+  return this.right - this.left;
+};
+
+for (var pairs = [], i = 0, l = 1 * million; i < l; ++i)
+  pairs.push(new pair_constructor(i, i + 1));
+
+benchmark(function () {
+  var total = 0;
+  for (var i = 0, l = pairs.length, pair; i < l; ++i) {
+    pair = pairs[i];
+    total += pair.diff();
+  }
+  return total;
+});
+</script>
+
+<script type='example' name='1M (float, float) array pairs (uncached)'>
+for (var pairs = [], i = 0, l = 1 * million; i < l; ++i)
+  pairs.push([i + 0.1, i + 1.1]);
+
+benchmark(function () {
+  var total = 0;
+  for (var i = 0, l = pairs.length; i < l; ++i)
+    total += pairs[i][1] - pairs[i][0];
+  return total;
+});
+</script>
+
+<script type='example' name='1M (float, float) array pairs (cached)'>
+for (var pairs = [], i = 0, l = 1 * million; i < l; ++i)
+  pairs.push([i + 0.1, i + 1.1]);
+
+benchmark(function () {
+  var total = 0;
+  for (var i = 0, l = pairs.length, pair; i < l; ++i) {
+    pair = pairs[i];
+    total += pair[1] - pair[0];
+  }
+  return total;
+});
+</script>
+
+<script type='example' name='1M (float, float) object pairs'>
+for (var pairs = [], i = 0, l = 1 * million; i < l; ++i)
+  pairs.push({left: i + 0.1, right: i + 1.1});
+
+benchmark(function () {
+  var total = 0;
+  for (var i = 0, l = pairs.length, pair; i < l; ++i) {
+    pair = pairs[i];
+    total += pair.right - pair.left;
+  }
+  return total;
+});
+</script>
+
+<script type='example' name='1M (float, float) instance pairs'>
+var pair_constructor = function (left, right) {
+  this.left = left;
+  this.right = right;
+};
+
+for (var pairs = [], i = 0, l = 1 * million; i < l; ++i)
+  pairs.push(new pair_constructor(i + 0.1, i + 1.1));
+
+benchmark(function () {
+  var total = 0;
+  for (var i = 0, l = pairs.length, pair; i < l; ++i) {
+    pair = pairs[i];
+    total += pair.right - pair.left;
+  }
+  return total;
+});
+</script>
+
+<script type='example' name='1M (float, float) instance pairs (getters)'>
+var pair_constructor = function (left, right) {
+  this.left = left;
+  this.right = right;
+};
+
+pair_constructor.prototype.get_left = function () {
+  return this.left;
+};
+
+pair_constructor.prototype.get_right = function () {
+  return this.right;
+};
+
+for (var pairs = [], i = 0, l = 1 * million; i < l; ++i)
+  pairs.push(new pair_constructor(i + 0.1, i + 1.1));
+
+benchmark(function () {
+  var total = 0;
+  for (var i = 0, l = pairs.length, pair; i < l; ++i) {
+    pair = pairs[i];
+    total += pair.get_right() - pair.get_left();
+  }
+  return total;
+});
+</script>
+
+<script type='example' name='1M (float, float) instance pairs (method)'>
+var pair_constructor = function (left, right) {
+  this.left = left;
+  this.right = right;
+};
+
+pair_constructor.prototype.diff = function () {
+  return this.right - this.left;
+};
+
+for (var pairs = [], i = 0, l = 1 * million; i < l; ++i)
+  pairs.push(new pair_constructor(i + 0.1, i + 1.1));
+
+benchmark(function () {
+  var total = 0;
+  for (var i = 0, l = pairs.length, pair; i < l; ++i) {
+    pair = pairs[i];
+    total += pair.diff();
+  }
+  return total;
+});
+</script>
+</div>
+
+<div name='String cons trees'>
+<script type='example' name='1M x 10 join construct'>
+benchmark(function () {
+  for (var pieces = [], i = 0, l = 1 * million; i < l; ++i)
+    pieces.push('Javascript');
+  return pieces.join('');
+});
+</script>
+
+<script type='example' name='1M x 10 += construct'>
+benchmark(function () {
+  for (var result = '', i = 0, l = 1 * million; i < l; ++i)
+    result += 'Javascript';
+  return result;
+});
+</script>
+
+<script type='example' name='1M x 10 join search'>
+for (var pieces = [], i = 0, l = 1 * million; i < l; ++i)
+  pieces.push('Javascript');
+
+var s = pieces.join('') + '!';
+
+benchmark(function () {
+  return s.indexOf('ipt!');
+});
+</script>
+
+<script type='example' name='1M x 10 += search'>
+for (var result = '', i = 0, l = 1 * million; i < l; ++i)
+  result += 'Javascript';
+result += '!';
+
+benchmark(function () {
+  return result.indexOf('ipt!');
+});
+</script>
+
+<script type='example' name='1M x 10 join regexp'>
+for (var pieces = [], i = 0, l = 1 * million; i < l; ++i)
+  pieces.push('Javascript');
+
+var s = pieces.join('') + '!';
+
+benchmark(function () {
+  return /(.)ipt!/.exec(s);
+});
+</script>
+
+<script type='example' name='1M x 10 += regexp'>
+for (var result = '', i = 0, l = 1 * million; i < l; ++i)
+  result += 'Javascript';
+result += '!';
+
+benchmark(function () {
+  return /(.)ipt!/.exec(result);
 });
 </script>
 </div>
