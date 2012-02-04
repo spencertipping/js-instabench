@@ -619,7 +619,10 @@ my $pattern = join '|', @_;
 __
 meta::function('reload', 'around_hook(\'reload\', sub {execute($_) for grep ! /^bootstrap::/, keys %data});');
 meta::function('render', <<'__');
+file::write('bench.waul', retrieve('waul::bench'));
+
 waul('bench');
+
 unlink 'index.html';
 file::write('index.html', retrieve('pp::index.html'));
 
@@ -1611,6 +1614,7 @@ meta::sdoc('index.html', <<'__');
 <html>
   <head>
   - script-include deps/jquery.min.js
+  - script-include deps/jquery.instavalidate.js
   - script-include deps/caterwaul.min.js
   - script-include deps/caterwaul.std.min.js
   - script-include deps/caterwaul.ui.min.js
@@ -1621,37 +1625,614 @@ meta::sdoc('index.html', <<'__');
   <body>
   <div id='builtins'>
 
-<div>
-<a>Integer sum</a>
-<pre class='setup'>
-for (var xs = [], i = 0; i &lt; 10 * million; ++i)
-  xs.push(i % 3);</pre>
-<pre class='bench'>
-for (var total = 0, i = 0, l = xs.length; i &lt; l; ++i)
-  total += xs[i];
-return total;</pre>
+<div name='Numerical computation'>
+<script type='example' name='Integer addition'>
+benchmark(function () {
+  for (var iteration = 0; iteration < 1000; ++iteration)
+    for (var total = 0, i = 0, l = 10 * thousand; i < l; ++i)
+      total += 2;
+
+  // Return total just in case V8 is smart enough to
+  // see that we're not using its value otherwise.
+  return total;
+});
+</script>
+
+<script type='example' name='Float-integer addition'>
+benchmark(function () {
+  for (var iteration = 0; iteration < 1000; ++iteration)
+    for (var total = 0.1, i = 0, l = 10 * thousand; i < l; ++i)
+      total += 2;
+  return total;
+});
+</script>
+
+<script type='example' name='Float-float addition'>
+benchmark(function () {
+  for (var iteration = 0; iteration < 1000; ++iteration)
+    for (var total = 0.1, i = 0, l = 10 * thousand; i < l; ++i)
+      total += 2.1;
+  return total;
+});
+</script>
+
+<script type='example' name='Integer multiplication'>
+benchmark(function () {
+  for (var iteration = 0; iteration < 1000; ++iteration)
+    for (var total = 0, i = 0, l = 10 * thousand; i < l; ++i)
+      total = i * 3;
+  return total;
+});
+</script>
+
+<script type='example' name='Float multiplication'>
+benchmark(function () {
+  for (var iteration = 0; iteration < 1000; ++iteration)
+    for (var total = 0, i = 0, l = 10 * thousand; i < l; ++i)
+      total = i * 3.1;
+  return total;
+});
+</script>
+
+<script type='example' name='Float division'>
+benchmark(function () {
+  for (var iteration = 0; iteration < 1000; ++iteration)
+    for (var total = 0, i = 0, l = 10 * thousand; i < l; ++i)
+      total = i / 3.1;
+  return total;
+});
+</script>
+
+<script type='example' name='Explicit division'>
+benchmark(function () {
+  for (var iteration = 0; iteration < 1000; ++iteration)
+    for (var total = 0, i = 0, l = 10 * thousand; i < l; ++i)
+      total = i / 4;
+  return total;
+});
+</script>
+
+<script type='example' name='Explicit division (truncated)'>
+benchmark(function () {
+  for (var iteration = 0; iteration < 1000; ++iteration)
+    for (var total = 0, i = 0, l = 10 * thousand; i < l; ++i)
+      total = i / 4 >>> 0;
+  return total;
+});
+</script>
+
+<script type='example' name='Explicit division (rounded)'>
+benchmark(function () {
+  for (var iteration = 0; iteration < 1000; ++iteration)
+    for (var total = 0, i = 0, l = 10 * thousand; i < l; ++i)
+      total = Math.round(i / 4);
+  return total;
+});
+</script>
+
+<script type='example' name='Explicit division (floored)'>
+benchmark(function () {
+  for (var iteration = 0; iteration < 1000; ++iteration)
+    for (var total = 0, i = 0, l = 10 * thousand; i < l; ++i)
+      total = Math.floor(i / 4);
+  return total;
+});
+</script>
+
+<script type='example' name='Explicit right-shift'>
+benchmark(function () {
+  for (var iteration = 0; iteration < 1000; ++iteration)
+    for (var total = 0, i = 0, l = 10 * thousand; i < l; ++i)
+      total = i >> 2;
+  return total;
+});
+</script>
+
+<script type='example' name='Integer bitwise AND'>
+benchmark(function () {
+  for (var iteration = 0; iteration < 1000; ++iteration)
+    for (var total = 0, i = 0, l = 10 * thousand; i < l; ++i)
+      total &= 2;
+  return total;
+});
+</script>
+
+<script type='example' name='Integer bitwise OR'>
+benchmark(function () {
+  for (var iteration = 0; iteration < 1000; ++iteration)
+    for (var total = 0, i = 0, l = 10 * thousand; i < l; ++i)
+      total |= 2;
+  return total;
+});
+</script>
+
+<script type='example' name='Integer bitwise XOR'>
+benchmark(function () {
+  for (var iteration = 0; iteration < 1000; ++iteration)
+    for (var total = 0, i = 0, l = 10 * thousand; i < l; ++i)
+      total ^= 2;
+  return total;
+});
+</script>
+
+<script type='example' name='Integer left-shift'>
+benchmark(function () {
+  for (var iteration = 0; iteration < 1000; ++iteration)
+    for (var total = 0, i = 0, l = 10 * thousand; i < l; ++i)
+      total = i << 2;
+  return total;
+});
+</script>
+
+<script type='example' name='Integer right arithmetic shift'>
+benchmark(function () {
+  for (var iteration = 0; iteration < 1000; ++iteration)
+    for (var total = 0, i = 0, l = 10 * thousand; i < l; ++i)
+      total = i >> 2;
+  return total;
+});
+</script>
+
+<script type='example' name='Integer right zero-fill shift'>
+benchmark(function () {
+  for (var iteration = 0; iteration < 1000; ++iteration)
+    for (var total = 0, i = 0, l = 10 * thousand; i < l; ++i)
+      total = i >>> 2;
+  return total;
+});
+</script>
+
+<script type='example' name='Integer set bit 29'>
+benchmark(function () {
+  for (var iteration = 0; iteration < 1000; ++iteration)
+    for (var total = 0, i = 0, l = 10 * thousand; i < l; ++i)
+      total |= 1 << 28;
+  return total;
+});
+</script>
+
+<script type='example' name='Integer set bit 30'>
+benchmark(function () {
+  for (var iteration = 0; iteration < 1000; ++iteration)
+    for (var total = 0, i = 0, l = 10 * thousand; i < l; ++i)
+      total |= 1 << 29;
+  return total;
+});
+</script>
+
+<script type='example' name='Integer set bit 31'>
+benchmark(function () {
+  for (var iteration = 0; iteration < 1000; ++iteration)
+    for (var total = 0, i = 0, l = 10 * thousand; i < l; ++i)
+      total |= 1 << 30;
+  return total;
+});
+</script>
+
+<script type='example' name='Integer set bit 32'>
+benchmark(function () {
+  for (var iteration = 0; iteration < 1000; ++iteration)
+    for (var total = 0, i = 0, l = 10 * thousand; i < l; ++i)
+      total |= 1 << 31;
+  return total;
+});
+</script>
 </div>
 
-<div>
-<a>Overflowing integer sum</a>
-<pre class='setup'>
-for (var xs = [], i = 0; i &lt; 10 * million; ++i)
-  xs.push(i);</pre>
-<pre class='bench'>
-for (var total = 0, i = 0, l = xs.length; i &lt; l; ++i)
-  total += xs[i];
-return total;</pre>
+<div name='Numerical boxing'>
+<script type='example' name='Integer local sum'>
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = xs.length; i < l; ++i)
+    total += xs[i];
+  return total;
+});
+</script>
+
+<script type='example' name='Integer local sum (uncached length)'>
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+benchmark(function () {
+  for (var total = 0, i = 0; i < xs.length; ++i)
+    total += xs[i];
+  return total;
+});
+</script>
+
+<script type='example' name='Integer local sum (unrolled)'>
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+benchmark(function () {
+  var total = 0;
+  for (var i = 0, l = xs.length >> 2; i < l; i += 4)
+    total += xs[i] + xs[i+1] + xs[i+2] + xs[i+3];
+  return total;
+});
+</script>
+
+<script type='example' name='Integer local sum (unrolled, no chains)'>
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+benchmark(function () {
+  // Computing the total in four pieces may
+  // increase the amount of pipelined execution
+  // that can take place by breaking register
+  // dependency chains:
+  var t1 = 0, t2 = 0, t3 = 0, t4 = 0;
+  for (var i = 0, l = xs.length >> 2; i < l; i += 4) {
+    t1 += xs[i];
+    t2 += xs[i + 1];
+    t3 += xs[i + 2];
+    t4 += xs[i + 3];
+  }
+  return t1 + t2 + t3 + t4;
+});
+</script>
+
+<script type='example' name='Overflowing integer local sum'>
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i);
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = xs.length; i < l; ++i)
+    total += xs[i];
+  return total;
+});
+</script>
+
+<script type='example' name='Float local sum'>
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push((i & 3) + 0.1);
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = xs.length; i < l; ++i)
+    total += xs[i];
+  return total;
+});
+</script>
+
+<script type='example' name='Array element integer sum'>
+var box = [0];
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+benchmark(function () {
+  box[0] = 0;
+  for (var i = 0, l = xs.length; i < l; ++i)
+    box[0] += xs[i];
+  return box[0];
+});
+</script>
+
+<script type='example' name='Array element float sum'>
+var box = [0.1];
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push((i & 3) - 0.1);
+
+benchmark(function () {
+  box[0] = 0.1;
+  for (var i = 0, l = xs.length; i < l; ++i)
+    box[0] += xs[i];
+  return box[0];
+});
+</script>
+
+<script type='example' name='Object element integer sum'>
+var box = {total: 0};
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+benchmark(function () {
+  box.total = 0;
+  for (var i = 0, l = xs.length; i < l; ++i)
+    box.total += xs[i];
+  return box.total;
+});
+</script>
+
+<script type='example' name='Object element float sum'>
+var box = {total: 0.1};
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push((i & 3) - 0.1);
+
+benchmark(function () {
+  box.total = 0.1;
+  for (var i = 0, l = xs.length; i < l; ++i)
+    box.total += xs[i];
+  return box.total;
+});
+</script>
+
+<script type='example' name='Integer fictitious closure(1) sum'>
+var total = 0;
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+benchmark(function () {
+  total = 0;
+  for (var i = 0, l = xs.length; i < l; ++i)
+    total += xs[i];
+  return total;
+});
+</script>
+
+<script type='example' name='Integer fictitious closure(2) sum'>
+var total = 0;
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+(function () {
+  benchmark(function () {
+    total = 0;
+    for (var i = 0, l = xs.length; i < l; ++i)
+      total += xs[i];
+    return total;
+  });
+})();
+</script>
+
+<!--
+<script type='example' name='Integer fictitious closure(3) sum'>
+var total = 0;
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+(function () {
+  (function () {
+    benchmark(function () {
+      total = 0;
+      for (var i = 0, l = xs.length; i < l; ++i)
+        total += xs[i];
+      return total;
+    });
+  })();
+})();
+</script>
+
+<script type='example' name='Integer fictitious closure(4) sum'>
+var total = 0;
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+(function () {
+  (function () {
+    (function () {
+      benchmark(function () {
+        total = 0;
+        for (var i = 0, l = xs.length; i < l; ++i)
+          total += xs[i];
+        return total;
+      });
+    })();
+  })();
+})();
+</script>
+-->
+
+<script type='example' name='Integer fictitious closure(5) sum'>
+var total = 0;
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+(function () {
+  (function () {
+    (function () {
+      (function () {
+        benchmark(function () {
+          total = 0;
+          for (var i = 0, l = xs.length; i < l; ++i)
+            total += xs[i];
+          return total;
+        });
+      })();
+    })();
+  })();
+})();
+</script>
+
+<script type='example' name='Integer half-fictitious closure(2) sum'>
+var total = 0;
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+(function (a) {
+  benchmark(function () {
+    total = 0;
+    for (var i = 0, l = xs.length; i < l; ++i)
+      total += xs[i];
+    return total;
+  });
+})(0);
+</script>
+
+<!--
+<script type='example' name='Integer half-fictitious closure(3) sum'>
+var total = 0;
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+(function (a) {
+  (function (b) {
+    benchmark(function () {
+      total = 0;
+      for (var i = 0, l = xs.length; i < l; ++i)
+        total += xs[i];
+      return total;
+    });
+  })(0);
+})(0);
+</script>
+
+<script type='example' name='Integer half-fictitious closure(4) sum'>
+var total = 0;
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+(function (a) {
+  (function (b) {
+    (function (c) {
+      benchmark(function () {
+        total = 0;
+        for (var i = 0, l = xs.length; i < l; ++i)
+          total += xs[i];
+        return total;
+      });
+    })(0);
+  })(0);
+})(0);
+</script>
+-->
+
+<script type='example' name='Integer half-fictitious closure(5) sum'>
+var total = 0;
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+(function (a) {
+  (function (b) {
+    (function (c) {
+      (function (d) {
+        benchmark(function () {
+          total = 0;
+          for (var i = 0, l = xs.length; i < l; ++i)
+            total += xs[i];
+          return total;
+        });
+      })(0);
+    })(0);
+  })(0);
+})(0);
+</script>
+
+<script type='example' name='Integer closure(2) sum'>
+var total = 0;
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+(function (a) {
+  benchmark(function () {
+    total = 0;
+    for (var i = 0, l = xs.length; i < l; ++i)
+      total += xs[i];
+    return a = total;
+  });
+  return a;
+})(0);
+</script>
+
+<!--
+<script type='example' name='Integer closure(3) sum'>
+var total = 0;
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+(function (a) {
+  (function (b) {
+    benchmark(function () {
+      total = 0;
+      for (var i = 0, l = xs.length; i < l; ++i)
+        total += xs[i];
+      return b = total;
+    });
+    return a = b;
+  })(0);
+  return a;
+})(0);
+</script>
+
+<script type='example' name='Integer closure(4) sum'>
+var total = 0;
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+(function (a) {
+  (function (b) {
+    (function (c) {
+      benchmark(function () {
+        total = 0;
+        for (var i = 0, l = xs.length; i < l; ++i)
+          total += xs[i];
+        return c = total;
+      });
+      return b = c;
+    })(0);
+    return a = b;
+  })(0);
+  return a;
+})(0);
+</script>
+-->
+
+<script type='example' name='Integer closure(5) sum'>
+var total = 0;
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+(function (a) {
+  (function (b) {
+    (function (c) {
+      (function (d) {
+        benchmark(function () {
+          total = 0;
+          for (var i = 0, l = xs.length; i < l; ++i)
+            total += xs[i];
+          return d = total;
+        });
+        return c = d;
+      })(0);
+      return b = c;
+    })(0);
+    return a = b;
+  })(0);
+  return a;
+})(0);
+</script>
 </div>
 
-<div>
-<a>Float sum</a>
-<pre class='setup'>
-for (var xs = [], i = 0; i &lt; 10 * million; ++i)
-  xs.push(i % 3 + 0.1);</pre>
-<pre class='bench'>
-for (var total = 0, i = 0, l = xs.length; i &lt; l; ++i)
-  total += xs[i];
-return total;</pre>
+<div name='L2 cache'>
+<script type='example' name='Sequential integer access'>
+for (var data = [], i = 0; i < 10 * million; ++i)
+  data.push(i & 3);
+for (var offsets = [], i = 0; i < data.length; ++i)
+  offsets.push(i);
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = offsets.length; i < l; ++i)
+    total += data[offsets[i]];
+  return total;
+});
+</script>
+
+<script type='example' name='Reverse integer access'>
+for (var data = [], i = 0; i < 10 * million; ++i)
+  data.push(i & 3);
+for (var offsets = [], i = 0; i < data.length; ++i)
+  offsets.push(data.length - i - 1);
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = offsets.length; i < l; ++i)
+    total += data[offsets[i]];
+  return total;
+});
+</script>
+
+<script type='example' name='Random integer access'>
+for (var data = [], i = 0; i < 10 * million; ++i)
+  data.push(i & 3);
+for (var offsets = [], i = 0; i < data.length; ++i)
+  offsets.push(Math.random() * data.length >>> 0);
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = offsets.length; i < l; ++i)
+    total += data[offsets[i]];
+  return total;
+});
+</script>
 </div>
 
   </div>
@@ -1664,7 +2245,15 @@ Benchmark stylesheet | Spencer Tipping
 Licensed under the terms of the MIT source code license
 
 body {font-family: sans-serif; font-size: 9pt}
-textarea {border: none; background: #eee; min-width: 500px; min-height: 100px; font-weight: bold; font-family: 'Droid Sans Mono', 'Monaco', monospace}
+textarea {border: none; background: #eee; min-width: 500px; min-height: 400px; font-weight: bold; font-family: 'Droid Sans Mono', 'Monaco', monospace}
+input    {border: none; background: #eee}
+
+input.name {font-weight: bold; min-width: 300px}
+input.duration {width: 4em; text-align: right}
+
+h1.category       {font-size: 9pt; color: #35a}
+h1.category:hover {text-decoration: underline}
+
 .invalid {color: red}
 .indent  {padding-left: 2ex}
 .errors  {color: red; font-weight: bold; padding: 10px}
@@ -1690,62 +2279,64 @@ though there are several built-ins.
 caterwaul.module('bench', 'js_all jquery', function (c) {
   $(init),
 
-  where [init()                      = $('body') /~append/ benchmark_interface() -then- $('#builtins').remove(),
-         benchmark_interface()       = jquery in div(div.right[builtins(), log()])[function_input_area()],
-         log()                       = jquery in table.log(tr(th('Average (ms)'), th('Min'), th('Max'), th('SD'), th('N'))),
+  where [init()                   = $('body') /~append/ benchmark_interface() -then- $('#builtins').remove(),
+         benchmark_interface()    = jquery in div(div.right[builtins(), log(), controls()])[function_input_area()],
+         log()                    = jquery in table.log(tr(th('Name'), th('Average (ms)'), th('Min'), th('Max'), th('SD'), th('N'))),
 
-         function_input_area()       = jquery [div.function_input(pre('(function () {'),
-                                                                  div.indent(
-                                                                    textarea.setup %checks_syntax,
-                                                                    pre('benchmark(function () {'),
-                                                                      div.indent(textarea.bench %checks_syntax),
-                                                                    pre('});')),
-                                                                  pre('})()'),
-                                                                  pre.errors,
-                                                                  div.controls(button.run('Run') /click(run)))]
+         controls()               = jquery [div.controls(button.run('Run') /click(run), ' for ', input.duration %accepts_numbers /val(1000), ' ms')]
+                                    -where [run(e) = run_benchmark($('input.name').val(), $('textarea.bench').val())],
 
-                                       -where [run(e)           = run_benchmark($('textarea.setup').val(), $('textarea.bench').val()),
-                                               checks_syntax(t) = t /~keyup/ check(t) /~change/ check(t),
-                                               check(t)(e)      = t.val() /!compile -then- t.removeClass('invalid') -rescue- t.addClass('invalid')],
+         function_input_area()    = jquery in div.function_input(input.name /val('Empty function'),
+                                                                 textarea.bench %accepts_valid_syntax /val('benchmark(function () {});'),
+                                                                 pre.errors),
 
-         builtins()                = jquery in div.builtins('Examples: ', ul[$('#builtins > div') *+[jquery in li(a /text(name) %clickable /click(populate)), re [it[0]],
-                                                                                                     where [name     = $(x).find('a').text(),
-                                                                                                            populate = populator($(x).find('.setup').text(),
-                                                                                                                                 $(x).find('.bench').text())]] -seq]),
+         builtins()               = jquery [div.builtins[lists()]]
+                                    -where [lists()             = $('#builtins > div') *[jquery in div(h1.category /text(name) %toggles_contents + ul[items_for($(x))] /hide()), re [it[0]],
+                                                                                         where [name = $(x).attr('name')]] -seq,
 
-         clickable(a)              = a.attr('href', 'javascript:void 0'),
-         dangerous(message, f)     = $('pre.errors').empty() -then- f() /rescue [$('pre.errors').text('Error #{message}: #{e}'), undefined],
+                                            items_for(div)      = div.children('script') *+[jquery in li(a /text(name) %clickable /click(populate)), re [it[0]],
+                                                                                            where [name     = $(x).attr('name'),
+                                                                                                   populate = populator(name, $(x).text())]] -seq,
 
-         compile(source)           = caterwaul()('(function () {#{source}})'),
-         populator(setup, bench)() = $('textarea.setup') /~val/ setup -then- $('textarea.bench') /~val/ bench,
+                                            toggles_contents(e) = e.click("$(this).next().toggle()".qf).css({cursor: 'pointer'})],
 
-         run_benchmark(s, b)       = execute_benchmark()
+         clickable(a)             = a.attr('href', 'javascript:void 0'),
+         accepts_numbers(e)       = e.instavalidate(/\d+(\.\d+)?/),
+         accepts_valid_syntax(e)  = e.instavalidate("compile(_) -rescue- false".qf),
 
-                             -where [execute_benchmark()             = compiled && run() && $('table.log') /~append/ the_log_entry(),
-                                     populate                        = populator(s, b),
-                                     nuke()                          = $(this).parents('tr').first().remove(),
-                                     log_entry(avg, min, max, sd, n) = jquery in tr(td /text(avg), td /text(min), td /text(max), td /text(sd), td /text(n),
-                                                                                    td(a('source') %clickable /click(populate)), td(a('[x]') %clickable /click(nuke))),
-                                     recorded_times                  = [],
-                                     record(time)                    = recorded_times /~push/ time,
+         compile(source)          = caterwaul()('(function () {#{source}})'),
+         dangerous(message, f)    = $('pre.errors').empty() -then- f() /rescue [$('pre.errors').text('Error #{message}: #{e}'), undefined],
 
-                                     benchmark(f)                    = null *~![+new Date - start < 5000][f(), record(-(last - (last = +new Date)))] -seq
-                                                                       -where [start = +new Date,
-                                                                               last  = start],
+         populator(name, bench)() = $('input.name') /~val/ name -then- $('textarea.bench') /~val/ bench,
 
-                                     environment()                   = {benchmark: benchmark, million: 1000000, thousand: 1000, billion: 1000000000},
+         run_benchmark(name, b)   = execute_benchmark()
 
-                                     run()                           = 'running benchmark function' /-dangerous/ compiled,
-                                     compiled                        = 'compiling benchmark function' /-dangerous/
-                                                                       "caterwaul()('(function () {#{s}; benchmark(function () {#{b}}); return true})', environment())".qf,
+                            -where [execute_benchmark()             = compiled && run() && $('table.log') /~append/ the_log_entry(),
+                                    populate                        = populator(name, b),
+                                    nuke()                          = $(this).parents('tr').first().remove(),
+                                    log_entry(avg, min, max, sd, n) = jquery in tr(td(a /text(name) %clickable /click(populate)),
+                                                                                   td /text(avg), td /text(min), td /text(max), td /text(sd), td /text(n),
+                                                                                   td(a('[x]') %clickable /click(nuke))),
+                                    recorded_times                  = [],
+                                    record(time)                    = recorded_times /~push/ time,
 
-                                     the_log_entry()                 = log_entry(average.toFixed(3),
-                                                                                 recorded_times /[Math.min(x, x0)] -seq,
-                                                                                 recorded_times /[Math.max(x, x0)] -seq,
-                                                                                 recorded_times /[0][x0 + (x - average) * (x - average)] /seq /!Math.sqrt -re- it.toFixed(3),
-                                                                                 recorded_times.length)
+                                    duration                        = +$('input.duration').val() || 5000,
+                                    benchmark(f)                    = null *~![+new Date - start < duration][f(), record(-(last - (last = +new Date)))] -seq
+                                                                      -where [start = +new Date,
+                                                                              last  = start],
 
-                                                                       -where [average = recorded_times /[x + x0] /seq / recorded_times.length]]]});
+                                    environment()                   = {benchmark: benchmark, billion: 1000000000, million: 1000000, thousand: 1000},
+
+                                    run()                           = 'running benchmark function' /-dangerous/ compiled,
+                                    compiled                        = 'compiling benchmark function' /-dangerous/ "caterwaul()('(function () {#{b}; return true})', environment())".qf,
+
+                                    the_log_entry()                 = log_entry(average.toFixed(3),
+                                                                                recorded_times /[Math.min(x, x0)] -seq,
+                                                                                recorded_times /[Math.max(x, x0)] -seq,
+                                                                                recorded_times /[0][x0 + (x - average) * (x - average)] /seq /!Math.sqrt -re- it.toFixed(3),
+                                                                                recorded_times.length)
+
+                                                                      -where [average = recorded_times /[x + x0] /seq / recorded_times.length]]]});
 
 __
 meta::template('comment', '\'\';     # A mechanism for line or block comments.');

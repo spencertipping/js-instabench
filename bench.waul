@@ -1,0 +1,70 @@
+# Javascript in-browser benchmark | Spencer Tipping
+# Licensed under the terms of the MIT source code license
+
+# Introduction.
+# This is a fairly simple application that takes a function, runs it until a certain amount of time has elapsed, and reports the output in terms of a histogram. The user supplies the function,
+# though there are several built-ins.
+
+caterwaul.module('bench', 'js_all jquery', function (c) {
+  $(init),
+
+  where [init()                   = $('body') /~append/ benchmark_interface() -then- $('#builtins').remove(),
+         benchmark_interface()    = jquery in div(div.right[builtins(), log(), controls()])[function_input_area()],
+         log()                    = jquery in table.log(tr(th('Name'), th('Average (ms)'), th('Min'), th('Max'), th('SD'), th('N'))),
+
+         controls()               = jquery [div.controls(button.run('Run') /click(run), ' for ', input.duration %accepts_numbers /val(1000), ' ms')]
+                                    -where [run(e) = run_benchmark($('input.name').val(), $('textarea.bench').val())],
+
+         function_input_area()    = jquery in div.function_input(input.name /val('Empty function'),
+                                                                 textarea.bench %accepts_valid_syntax /val('benchmark(function () {});'),
+                                                                 pre.errors),
+
+         builtins()               = jquery [div.builtins[lists()]]
+                                    -where [lists()             = $('#builtins > div') *[jquery in div(h1.category /text(name) %toggles_contents + ul[items_for($(x))] /hide()), re [it[0]],
+                                                                                         where [name = $(x).attr('name')]] -seq,
+
+                                            items_for(div)      = div.children('script') *+[jquery in li(a /text(name) %clickable /click(populate)), re [it[0]],
+                                                                                            where [name     = $(x).attr('name'),
+                                                                                                   populate = populator(name, $(x).text())]] -seq,
+
+                                            toggles_contents(e) = e.click("$(this).next().toggle()".qf).css({cursor: 'pointer'})],
+
+         clickable(a)             = a.attr('href', 'javascript:void 0'),
+         accepts_numbers(e)       = e.instavalidate(/\d+(\.\d+)?/),
+         accepts_valid_syntax(e)  = e.instavalidate("compile(_) -rescue- false".qf),
+
+         compile(source)          = caterwaul()('(function () {#{source}})'),
+         dangerous(message, f)    = $('pre.errors').empty() -then- f() /rescue [$('pre.errors').text('Error #{message}: #{e}'), undefined],
+
+         populator(name, bench)() = $('input.name') /~val/ name -then- $('textarea.bench') /~val/ bench,
+
+         run_benchmark(name, b)   = execute_benchmark()
+
+                            -where [execute_benchmark()             = compiled && run() && $('table.log') /~append/ the_log_entry(),
+                                    populate                        = populator(name, b),
+                                    nuke()                          = $(this).parents('tr').first().remove(),
+                                    log_entry(avg, min, max, sd, n) = jquery in tr(td(a /text(name) %clickable /click(populate)),
+                                                                                   td /text(avg), td /text(min), td /text(max), td /text(sd), td /text(n),
+                                                                                   td(a('[x]') %clickable /click(nuke))),
+                                    recorded_times                  = [],
+                                    record(time)                    = recorded_times /~push/ time,
+
+                                    duration                        = +$('input.duration').val() || 5000,
+                                    benchmark(f)                    = null *~![+new Date - start < duration][f(), record(-(last - (last = +new Date)))] -seq
+                                                                      -where [start = +new Date,
+                                                                              last  = start],
+
+                                    environment()                   = {benchmark: benchmark, billion: 1000000000, million: 1000000, thousand: 1000},
+
+                                    run()                           = 'running benchmark function' /-dangerous/ compiled,
+                                    compiled                        = 'compiling benchmark function' /-dangerous/ "caterwaul()('(function () {#{b}; return true})', environment())".qf,
+
+                                    the_log_entry()                 = log_entry(average.toFixed(3),
+                                                                                recorded_times /[Math.min(x, x0)] -seq,
+                                                                                recorded_times /[Math.max(x, x0)] -seq,
+                                                                                recorded_times /[0][x0 + (x - average) * (x - average)] /seq /!Math.sqrt -re- it.toFixed(3),
+                                                                                recorded_times.length)
+
+                                                                      -where [average = recorded_times /[x + x0] /seq / recorded_times.length]]]});
+
+# Generated by SDoc 
