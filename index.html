@@ -1148,6 +1148,116 @@ benchmark(function () {
   return total;
 });
 </script>
+</div>
+
+<div name='Native code'>
+<script type='example' name='Char search using charAt'>
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push('.');
+var s = xs.join('') + '!';
+
+benchmark(function () {
+  for (var i = 0, l = s.length; i < l; ++i)
+    if (s.charAt(i) === '!')
+      return i;
+  return -1;
+});
+</script>
+
+<script type='example' name='Char search using charCodeAt'>
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push('.');
+var s = xs.join('') + '!';
+
+benchmark(function () {
+  for (var i = 0, l = s.length; i < l; ++i)
+    if (s.charCodeAt(i) === 33)
+      return i;
+  return -1;
+});
+</script>
+
+<script type='example' name='Char search using indexOf'>
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push('.');
+var s = xs.join('') + '!';
+
+benchmark(function () {
+  return s.indexOf('!');
+});
+</script>
+
+<script type='example' name='Short substring search using indexOf'>
+for (var xs = [], i = 0; i < 1 * million; ++i)
+  xs.push('Javascript');
+var s = xs.join('') + '!';
+
+benchmark(function () {
+  return s.indexOf('t!');
+});
+</script>
+
+<script type='example' name='Short substring search using regexp'>
+for (var xs = [], i = 0; i < 1 * million; ++i)
+  xs.push('Javascript');
+var s = xs.join('') + '!';
+
+benchmark(function () {
+  return /t!/.exec(s).index;
+});
+</script>
+
+<script type='example' name='Long substring search using indexOf'>
+for (var xs = [], i = 0; i < 1 * million; ++i)
+  xs.push('Javascript');
+var s = xs.join('') + '!';
+
+benchmark(function () {
+  return s.indexOf('Javascript!');
+});
+</script>
+
+<script type='example' name='Long substring search using regexp'>
+for (var xs = [], i = 0; i < 1 * million; ++i)
+  xs.push('Javascript');
+var s = xs.join('') + '!';
+
+benchmark(function () {
+  return /Javascript!/.exec(s).index;
+});
+</script>
+
+<script type='example' name='Long substring search using BMH'>
+for (var xs = [], i = 0; i < 1 * million; ++i)
+  xs.push('Javascript');
+var s = xs.join('') + '!';
+var pattern = 'Javascript!';
+
+// Boyer-Moore-Horspool algorithm:
+// Note that the pattern-index step is included in the
+// benchmark, since native implementations would have
+// to do this too.
+benchmark(function () {
+  for (var i = 0, forwards = [], x = pattern.length; i < 256; ++i)
+    forwards.push(x);
+  for (var l = pattern.length, i = l - 1, p; i >= 0; --i)
+    forwards[p] = l - i;
+  for (var i = 0, l = s.length, pl = pattern.length, c; i < l;)
+    for (var j = pl - 1; j >= 0; --j)
+      if ((c = s.charCodeAt(i + j)) === pattern.charCodeAt(j)) {
+        if (!j)
+          return i;
+      } else {
+        i += forwards[c];
+        break;
+      }
+  return -1;
+});
+</script>
+
+</div>
+
+<div name='GC'>
 
 </div>
 
