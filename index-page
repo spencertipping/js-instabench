@@ -2407,6 +2407,37 @@ benchmark(function () {
 });
 </script>
 
+<script type='example' name='Char search using split array'>
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push('.');
+var s = xs.join('') + '!';
+var chars = s.split('');
+
+benchmark(function () {
+  for (var i = 0, l = chars.length; i < l; ++i)
+    if (chars[i] === '!')
+      return i;
+  return -1;
+});
+</script>
+
+<script type='example' name='Char search using number array'>
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push('.');
+var s = xs.join('') + '!';
+var numbers = [];
+
+for (var i = 0, l = s.length; i < l; ++i)
+  numbers.push(s.charCodeAt(i));
+
+benchmark(function () {
+  for (var i = 0, l = numbers.length; i < l; ++i)
+    if (numbers[i] === 33)
+      return i;
+  return -1;
+});
+</script>
+
 <script type='example' name='Char search using indexOf'>
 for (var xs = [], i = 0; i < 10 * million; ++i)
   xs.push('.');
@@ -2417,7 +2448,7 @@ benchmark(function () {
 });
 </script>
 
-<script type='example' name='Short substring search using indexOf'>
+<script type='example' name='Short string search using indexOf'>
 for (var xs = [], i = 0; i < 1 * million; ++i)
   xs.push('Javascript');
 var s = xs.join('') + '!';
@@ -2427,7 +2458,7 @@ benchmark(function () {
 });
 </script>
 
-<script type='example' name='Short substring search using regexp'>
+<script type='example' name='Short string search using regexp'>
 for (var xs = [], i = 0; i < 1 * million; ++i)
   xs.push('Javascript');
 var s = xs.join('') + '!';
@@ -2437,7 +2468,7 @@ benchmark(function () {
 });
 </script>
 
-<script type='example' name='Long substring search using indexOf'>
+<script type='example' name='Long string search using indexOf'>
 for (var xs = [], i = 0; i < 1 * million; ++i)
   xs.push('Javascript');
 var s = xs.join('') + '!';
@@ -2447,7 +2478,7 @@ benchmark(function () {
 });
 </script>
 
-<script type='example' name='Long substring search using regexp'>
+<script type='example' name='Long string search using regexp'>
 for (var xs = [], i = 0; i < 1 * million; ++i)
   xs.push('Javascript');
 var s = xs.join('') + '!';
@@ -2457,7 +2488,7 @@ benchmark(function () {
 });
 </script>
 
-<script type='example' name='Long substring search using BMH'>
+<script type='example' name='Long string search using BMH'>
 for (var xs = [], i = 0; i < 1 * million; ++i)
   xs.push('Javascript');
 var s = xs.join('') + '!';
@@ -2484,11 +2515,153 @@ benchmark(function () {
   return -1;
 });
 </script>
+</div>
 
+<div name='Properties'>
+<script type='example' name='Explicit conditional'>
+var o = {foo: 0, boo: 1};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    if (i & 1) total += o.foo;
+    else       total += o.boo;
+  return total;
+});
+</script>
+
+<script type='example' name='Explicit ternary'>
+var o = {foo: 0, boo: 1};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    total += i & 1 ? o.foo : o.boo;
+  return total;
+});
+</script>
+
+<script type='example' name='Soft conditional'>
+var o = {foo: 0, boo: 1};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i) {
+    var property;
+    if (i & 1) property = 'foo';
+    else       property = 'boo';
+    total += o[property];
+  }
+  return total;
+});
+</script>
+
+<script type='example' name='Soft ternary'>
+var o = {foo: 0, boo: 1};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    total += o[i & 1 ? 'foo' : 'boo'];
+  return total;
+});
+</script>
+
+<script type='example' name='Constructed ternary'>
+var o = {foo: 0, boo: 1};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    total += o[(i & 1 ? 'f' : 'b') + 'oo'];
+  return total;
+});
+</script>
+
+<script type='example' name='Fictitious constructed ternary'>
+var o = {foo: 0, boo: 1};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i) {
+    var property = (i & 1 ? 'f' : 'b') + 'oo';
+    total += o[i & 1 ? 'foo' : 'boo'];
+  }
+  return total;
+});
+</script>
 </div>
 
 <div name='GC'>
+<script type='example' name='Small allocation, no live set'>
+var tree = function (n) {
+  return n ? [tree(n - 1), n, tree(n - 1)] : [];
+};
+tree(20);
 
+benchmark(function () {
+  return tree(16);
+});
+</script>
+
+<script type='example' name='Small allocation, sequential live set'>
+var tree = function (n) {
+  return n ? [tree(n - 1), n, tree(n - 1)] : [];
+};
+var live_set = tree(20);
+
+benchmark(function () {
+  return tree(16);
+});
+</script>
+
+<script type='example' name='Small allocation, fragmented live set'>
+var tree = function (n) {
+  if (n > 0) {
+    var right = tree(n - 1);
+    var left  = tree(n - 1);
+    return [left, n, right];
+  } else
+    return [];
+};
+var live_set = tree(20);
+
+benchmark(function () {
+  return tree(16);
+});
+</script>
+
+<script type='example' name='Large allocation, no live set'>
+var tree = function (n) {
+  return n ? [tree(n - 1), n, tree(n - 1)] : [];
+};
+tree(20);
+
+benchmark(function () {
+  return tree(20);
+});
+</script>
+
+<script type='example' name='Large allocation, sequential live set'>
+var tree = function (n) {
+  return n ? [tree(n - 1), n, tree(n - 1)] : [];
+};
+var live_set = tree(20);
+
+benchmark(function () {
+  return tree(20);
+});
+</script>
+
+<script type='example' name='Large allocation, fragmented live set'>
+var tree = function (n) {
+  if (n > 0) {
+    var right = tree(n - 1);
+    var left  = tree(n - 1);
+    return [left, n, right];
+  } else
+    return [];
+};
+var live_set = tree(20);
+
+benchmark(function () {
+  return tree(20);
+});
+</script>
 </div>
 
   </div>
