@@ -2196,7 +2196,7 @@ for (var xs = [], i = 0; i < 10 * million; ++i)
 
 <div name='L2 cache'>
 <script type='example' name='Sequential integer access'>
-for (var data = [], i = 0; i < 10 * million; ++i)
+for (var data = [], i = 0; i < 1 * million; ++i)
   data.push(i & 3);
 for (var offsets = [], i = 0; i < data.length; ++i)
   offsets.push(i);
@@ -2209,7 +2209,7 @@ benchmark(function () {
 </script>
 
 <script type='example' name='Reverse integer access'>
-for (var data = [], i = 0; i < 10 * million; ++i)
+for (var data = [], i = 0; i < 1 * million; ++i)
   data.push(i & 3);
 for (var offsets = [], i = 0; i < data.length; ++i)
   offsets.push(data.length - i - 1);
@@ -2222,7 +2222,7 @@ benchmark(function () {
 </script>
 
 <script type='example' name='Random integer access'>
-for (var data = [], i = 0; i < 10 * million; ++i)
+for (var data = [], i = 0; i < 1 * million; ++i)
   data.push(i & 3);
 for (var offsets = [], i = 0; i < data.length; ++i)
   offsets.push(Math.random() * data.length >>> 0);
@@ -2233,6 +2233,152 @@ benchmark(function () {
   return total;
 });
 </script>
+
+<script type='example' name='48-offset integer access'>
+for (var data = [], i = 0; i < 1 * million; ++i)
+  data.push(i & 3);
+for (var offsets = [], i = 0; i < data.length; ++i)
+  offsets.push(48 * i % data.length);
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = offsets.length; i < l; ++i)
+    total += data[offsets[i]];
+  return total;
+});
+</script>
+
+<script type='example' name='56-offset integer access'>
+for (var data = [], i = 0; i < 1 * million; ++i)
+  data.push(i & 3);
+for (var offsets = [], i = 0; i < data.length; ++i)
+  offsets.push(56 * i % data.length);
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = offsets.length; i < l; ++i)
+    total += data[offsets[i]];
+  return total;
+});
+</script>
+
+<script type='example' name='60-offset integer access'>
+for (var data = [], i = 0; i < 1 * million; ++i)
+  data.push(i & 3);
+for (var offsets = [], i = 0; i < data.length; ++i)
+  offsets.push(60 * i % data.length);
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = offsets.length; i < l; ++i)
+    total += data[offsets[i]];
+  return total;
+});
+</script>
+
+<script type='example' name='62-offset integer access'>
+for (var data = [], i = 0; i < 1 * million; ++i)
+  data.push(i & 3);
+for (var offsets = [], i = 0; i < data.length; ++i)
+  offsets.push(62 * i % data.length);
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = offsets.length; i < l; ++i)
+    total += data[offsets[i]];
+  return total;
+});
+</script>
+
+<script type='example' name='63-offset integer access'>
+for (var data = [], i = 0; i < 1 * million; ++i)
+  data.push(i & 3);
+for (var offsets = [], i = 0; i < data.length; ++i)
+  offsets.push(63 * i % data.length);
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = offsets.length; i < l; ++i)
+    total += data[offsets[i]];
+  return total;
+});
+</script>
+
+<script type='example' name='64-offset integer access'>
+for (var data = [], i = 0; i < 1 * million; ++i)
+  data.push(i & 3);
+for (var offsets = [], i = 0; i < data.length; ++i)
+  offsets.push(64 * i % data.length);
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = offsets.length; i < l; ++i)
+    total += data[offsets[i]];
+  return total;
+});
+</script>
+
+<script type='example' name='65-offset integer access'>
+for (var data = [], i = 0; i < 1 * million; ++i)
+  data.push(i & 3);
+for (var offsets = [], i = 0; i < data.length; ++i)
+  offsets.push(65 * i % data.length);
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = offsets.length; i < l; ++i)
+    total += data[offsets[i]];
+  return total;
+});
+</script>
+
+<script type='example' name='Sequential integers (sparse)'>
+for (var data = [], i = 0; i < 1 * million; ++i)
+  data[i * 9817 % million] = i & 3;
+
+for (var i = 0; i < data.length; ++i)
+  if (data[i] === undefined)
+    throw new Error('Oops, you missed one: ' + i);
+
+for (var offsets = [], i = 0; i < data.length; ++i)
+  offsets.push(i);
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = offsets.length; i < l; ++i)
+    total += data[offsets[i]];
+  return total;
+});
+</script>
+
+<script type='example' name='Reverse integers (sparse)'>
+for (var data = [], i = 0; i < 1 * million; ++i)
+  data[i * 9817 % million] = i & 3;
+
+for (var i = 0; i < data.length; ++i)
+  if (data[i] === undefined)
+    throw new Error('Oops, you missed one: ' + i);
+
+for (var offsets = [], i = 0; i < data.length; ++i)
+  offsets.push(data.length - i - 1);
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = offsets.length; i < l; ++i)
+    total += data[offsets[i]];
+  return total;
+});
+</script>
+
+<script type='example' name='Random integers (sparse)'>
+for (var data = [], i = 0; i < 1 * million; ++i)
+  data[i * 9817 % million] = i & 3;
+
+for (var i = 0; i < data.length; ++i)
+  if (data[i] === undefined)
+    throw new Error('Oops, you missed one: ' + i);
+
+for (var offsets = [], i = 0; i < data.length; ++i)
+  offsets.push(Math.random() * data.length >>> 0);
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = offsets.length; i < l; ++i)
+    total += data[offsets[i]];
+  return total;
+});
+</script>
+
 </div>
 
   </div>
