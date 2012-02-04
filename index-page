@@ -2380,6 +2380,89 @@ benchmark(function () {
 </script>
 </div>
 
+<div name='Branch prediction'>
+<script type='example' name='Always taken'>
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    if (i & 0x2000000) total += 2;
+    else               total += 3;
+  return total;
+});
+</script>
+
+<script type='example' name='Never taken'>
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    if (! (i & 0x2000000)) total += 2;
+    else                   total += 3;
+  return total;
+});
+</script>
+
+<script type='example' name='1/1 alternation'>
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    if (i & 1) total += 2;
+    else       total += 3;
+  return total;
+});
+</script>
+
+<script type='example' name='2/2 alternation'>
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    if (i & 2) total += 2;
+    else       total += 3;
+  return total;
+});
+</script>
+
+<script type='example' name='4/4 alternation'>
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    if (i & 4) total += 2;
+    else       total += 3;
+  return total;
+});
+</script>
+
+<script type='example' name='8/8 alternation'>
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    if (i & 8) total += 2;
+    else       total += 3;
+  return total;
+});
+</script>
+
+<script type='example' name='1/3 alternation'>
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    if (i & 3) total += 2;
+    else       total += 3;
+  return total;
+});
+</script>
+
+<script type='example' name='1/7 alternation'>
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    if (i & 7) total += 2;
+    else       total += 3;
+  return total;
+});
+</script>
+
+<script type='example' name='1/15 alternation'>
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    if (i & 0xf) total += 2;
+    else         total += 3;
+  return total;
+});
+</script>
+</div>
+
 <div name='Native code'>
 <script type='example' name='Char search using charAt'>
 for (var xs = [], i = 0; i < 10 * million; ++i)
@@ -2517,7 +2600,7 @@ benchmark(function () {
 </script>
 </div>
 
-<div name='Properties'>
+<div name='Object access'>
 <script type='example' name='Explicit conditional'>
 var o = {foo: 0, boo: 1};
 
