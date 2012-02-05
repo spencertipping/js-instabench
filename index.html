@@ -1010,112 +1010,58 @@ benchmark(function () {
 });
 </script>
 
-<script type='example' name='48-offset integer access'>
-for (var data = [], i = 0; i < 1 * million; ++i)
-  data.push(i & 3);
-
-benchmark(function () {
-  for (var total = 0, i = 0, l = data.length - 1024; i < l; ++i)
-    total += data[i] + data[i + 48];
-  return total;
-});
-</script>
-
-<script type='example' name='64-offset integer access'>
-for (var data = [], i = 0; i < 1 * million; ++i)
-  data.push(i & 3);
-
-benchmark(function () {
-  for (var total = 0, i = 0, l = data.length - 1024; i < l; ++i)
-    total += data[i] + data[i + 64];
-  return total;
-});
-</script>
-
-<script type='example' name='96-offset integer access'>
-for (var data = [], i = 0; i < 1 * million; ++i)
-  data.push(i & 3);
-
-benchmark(function () {
-  for (var total = 0, i = 0, l = data.length - 1024; i < l; ++i)
-    total += data[i] + data[i + 96];
-  return total;
-});
-</script>
-
-<script type='example' name='128-offset integer access'>
-for (var data = [], i = 0; i < 1 * million; ++i)
-  data.push(i & 3);
-
-benchmark(function () {
-  for (var total = 0, i = 0, l = data.length - 1024; i < l; ++i)
-    total += data[i] + data[i + 128];
-  return total;
-});
-</script>
-
-<script type='example' name='192-offset integer access'>
-for (var data = [], i = 0; i < 1 * million; ++i)
-  data.push(i & 3);
-
-benchmark(function () {
-  for (var total = 0, i = 0, l = data.length - 1024; i < l; ++i)
-    total += data[i] + data[i + 192];
-  return total;
-});
-</script>
-
-<script type='example' name='256-offset integer access'>
-for (var data = [], i = 0; i < 1 * million; ++i)
-  data.push(i & 3);
-
-benchmark(function () {
-  for (var total = 0, i = 0, l = data.length - 1024; i < l; ++i)
-    total += data[i] + data[i + 256];
-  return total;
-});
-</script>
-
-<script type='example' name='384-offset integer access'>
-for (var data = [], i = 0; i < 1 * million; ++i)
-  data.push(i & 3);
-
-benchmark(function () {
-  for (var total = 0, i = 0, l = data.length - 1024; i < l; ++i)
-    total += data[i] + data[i + 384];
-  return total;
-});
-</script>
-
 <script type='example' name='512-offset integer access'>
-for (var data = [], i = 0; i < 1 * million; ++i)
+for (var data = [], i = 0; i < 10 * million; ++i)
   data.push(i & 3);
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = data.length - 1024; i < l; ++i)
+  for (var total = 0, i = 0, l = data.length - 8192; i < l; ++i)
     total += data[i] + data[i + 512];
   return total;
 });
 </script>
 
-<script type='example' name='768-offset integer access'>
-for (var data = [], i = 0; i < 1 * million; ++i)
+<script type='example' name='1024-offset integer access'>
+for (var data = [], i = 0; i < 10 * million; ++i)
   data.push(i & 3);
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = data.length - 1024; i < l; ++i)
-    total += data[i] + data[i + 768];
+  for (var total = 0, i = 0, l = data.length - 8192; i < l; ++i)
+    total += data[i] + data[i + 1024];
   return total;
 });
 </script>
 
-<script type='example' name='1024-offset integer access'>
-for (var data = [], i = 0; i < 1 * million; ++i)
+<script type='example' name='2048-offset integer access'>
+for (var data = [], i = 0; i < 10 * million; ++i)
   data.push(i & 3);
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = data.length - 1024; i < l; ++i)
-    total += data[i] + data[i + 1024];
+  for (var total = 0, i = 0, l = data.length - 8192; i < l; ++i)
+    total += data[i] + data[i + 2048];
+  return total;
+});
+</script>
+
+
+<script type='example' name='4096-offset integer access'>
+for (var data = [], i = 0; i < 10 * million; ++i)
+  data.push(i & 3);
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = data.length - 8192; i < l; ++i)
+    total += data[i] + data[i + 4096];
+  return total;
+});
+</script>
+
+<script type='example' name='8192-offset integer access'>
+for (var data = [], i = 0; i < 10 * million; ++i)
+  data.push(i & 3);
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = data.length - 8192; i < l; ++i)
+    total += data[i] + data[i + 8192];
   return total;
 });
 </script>
