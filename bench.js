@@ -5,7 +5,7 @@ return jQuery( "<table>" ) .addClass( "log" ) .append(jQuery( "<tr>" ) .append(j
 return(function( ) {var run=function(e) {;
 return run_benchmark($( 'input.name' ) .val() ,$( 'textarea.bench' ) .val() ) } ;
 return(jQuery( "<div>" ) .addClass( "controls" ) .append(jQuery( "<button>" ) .addClass( "run" ) .append(jQuery( "<span>" + ( 'Run' ) + "</span>" ) ) .click(run) .add(jQuery( "<span>" + ( ' for ' ) + "</span>" ) ) .add(accepts_numbers(jQuery( "<input>" ) .addClass( "duration" ) ) .val(1000) ) .add(jQuery( "<span>" + ( ' ms' ) + "</span>" ) ) ) ) } ) .call(this) } ,function_input_area=function() {;
-return jQuery( "<div>" ) .addClass( "function-input" ) .append(jQuery( "<input>" ) .addClass( "name" ) .val( 'Empty function' ) .add(accepts_valid_syntax(jQuery( "<textarea>" ) .addClass( "bench" ) ) .val( 'benchmark(function () {});' ) ) .add(jQuery( "<pre>" ) .addClass( "errors" ) ) ) } ,builtins=function() {;
+return jQuery( "<div>" ) .addClass( "function-input" ) .append(jQuery( "<div>" ) .append(jQuery( "<input>" ) .addClass( "name" ) .val( 'Empty function' ) ) .add(accepts_valid_syntax(jQuery( "<textarea>" ) .addClass( "bench" ) ) .val( 'benchmark(function () {});' ) ) .add(jQuery( "<pre>" ) .addClass( "errors" ) ) ) } ,builtins=function() {;
 return(function( ) {var lists=function() {;
 return(function(xs) {var x,x0,xi,xl,xr;
 for(var xr=new xs.constructor() ,xi=0,xl=xs.length;

@@ -3565,7 +3565,7 @@ caterwaul.module('bench', 'js_all jquery', function (c) {
          controls()               = jquery [div.controls(button.run('Run') /click(run), ' for ', input.duration %accepts_numbers /val(1000), ' ms')]
                                     -where [run(e) = run_benchmark($('input.name').val(), $('textarea.bench').val())],
 
-         function_input_area()    = jquery in div.function_input(input.name /val('Empty function'),
+         function_input_area()    = jquery in div.function_input(div(input.name /val('Empty function')),
                                                                  textarea.bench %accepts_valid_syntax /val('benchmark(function () {});'),
                                                                  pre.errors),
 
