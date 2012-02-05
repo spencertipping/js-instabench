@@ -2243,64 +2243,10 @@ benchmark(function () {
 <script type='example' name='48-offset integer access'>
 for (var data = [], i = 0; i < 1 * million; ++i)
   data.push(i & 3);
-for (var offsets = [], i = 0; i < data.length; ++i)
-  offsets.push(48 * i % data.length);
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = offsets.length; i < l; ++i)
-    total += data[offsets[i]];
-  return total;
-});
-</script>
-
-<script type='example' name='56-offset integer access'>
-for (var data = [], i = 0; i < 1 * million; ++i)
-  data.push(i & 3);
-for (var offsets = [], i = 0; i < data.length; ++i)
-  offsets.push(56 * i % data.length);
-
-benchmark(function () {
-  for (var total = 0, i = 0, l = offsets.length; i < l; ++i)
-    total += data[offsets[i]];
-  return total;
-});
-</script>
-
-<script type='example' name='60-offset integer access'>
-for (var data = [], i = 0; i < 1 * million; ++i)
-  data.push(i & 3);
-for (var offsets = [], i = 0; i < data.length; ++i)
-  offsets.push(60 * i % data.length);
-
-benchmark(function () {
-  for (var total = 0, i = 0, l = offsets.length; i < l; ++i)
-    total += data[offsets[i]];
-  return total;
-});
-</script>
-
-<script type='example' name='62-offset integer access'>
-for (var data = [], i = 0; i < 1 * million; ++i)
-  data.push(i & 3);
-for (var offsets = [], i = 0; i < data.length; ++i)
-  offsets.push(62 * i % data.length);
-
-benchmark(function () {
-  for (var total = 0, i = 0, l = offsets.length; i < l; ++i)
-    total += data[offsets[i]];
-  return total;
-});
-</script>
-
-<script type='example' name='63-offset integer access'>
-for (var data = [], i = 0; i < 1 * million; ++i)
-  data.push(i & 3);
-for (var offsets = [], i = 0; i < data.length; ++i)
-  offsets.push(63 * i % data.length);
-
-benchmark(function () {
-  for (var total = 0, i = 0, l = offsets.length; i < l; ++i)
-    total += data[offsets[i]];
+  for (var total = 0, i = 0, l = data.length - 1024; i < l; ++i)
+    total += data[i] + data[i + 48];
   return total;
 });
 </script>
@@ -2308,25 +2254,98 @@ benchmark(function () {
 <script type='example' name='64-offset integer access'>
 for (var data = [], i = 0; i < 1 * million; ++i)
   data.push(i & 3);
-for (var offsets = [], i = 0; i < data.length; ++i)
-  offsets.push(64 * i % data.length);
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = offsets.length; i < l; ++i)
-    total += data[offsets[i]];
+  for (var total = 0, i = 0, l = data.length - 1024; i < l; ++i)
+    total += data[i] + data[i + 64];
   return total;
 });
 </script>
 
-<script type='example' name='65-offset integer access'>
+<script type='example' name='96-offset integer access'>
 for (var data = [], i = 0; i < 1 * million; ++i)
   data.push(i & 3);
-for (var offsets = [], i = 0; i < data.length; ++i)
-  offsets.push(65 * i % data.length);
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = offsets.length; i < l; ++i)
-    total += data[offsets[i]];
+  for (var total = 0, i = 0, l = data.length - 1024; i < l; ++i)
+    total += data[i] + data[i + 96];
+  return total;
+});
+</script>
+
+<script type='example' name='128-offset integer access'>
+for (var data = [], i = 0; i < 1 * million; ++i)
+  data.push(i & 3);
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = data.length - 1024; i < l; ++i)
+    total += data[i] + data[i + 128];
+  return total;
+});
+</script>
+
+<script type='example' name='192-offset integer access'>
+for (var data = [], i = 0; i < 1 * million; ++i)
+  data.push(i & 3);
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = data.length - 1024; i < l; ++i)
+    total += data[i] + data[i + 192];
+  return total;
+});
+</script>
+
+<script type='example' name='256-offset integer access'>
+for (var data = [], i = 0; i < 1 * million; ++i)
+  data.push(i & 3);
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = data.length - 1024; i < l; ++i)
+    total += data[i] + data[i + 256];
+  return total;
+});
+</script>
+
+<script type='example' name='384-offset integer access'>
+for (var data = [], i = 0; i < 1 * million; ++i)
+  data.push(i & 3);
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = data.length - 1024; i < l; ++i)
+    total += data[i] + data[i + 384];
+  return total;
+});
+</script>
+
+<script type='example' name='512-offset integer access'>
+for (var data = [], i = 0; i < 1 * million; ++i)
+  data.push(i & 3);
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = data.length - 1024; i < l; ++i)
+    total += data[i] + data[i + 512];
+  return total;
+});
+</script>
+
+<script type='example' name='768-offset integer access'>
+for (var data = [], i = 0; i < 1 * million; ++i)
+  data.push(i & 3);
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = data.length - 1024; i < l; ++i)
+    total += data[i] + data[i + 768];
+  return total;
+});
+</script>
+
+<script type='example' name='1024-offset integer access'>
+for (var data = [], i = 0; i < 1 * million; ++i)
+  data.push(i & 3);
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = data.length - 1024; i < l; ++i)
+    total += data[i] + data[i + 1024];
   return total;
 });
 </script>
@@ -3494,6 +3513,57 @@ var live_set = tree(20);
 
 benchmark(function () {
   return tree(20);
+});
+</script>
+</div>
+
+<div name='DOM'>
+<script type='example' name='Create 100k empty arrays'>
+benchmark(function () {
+  var result = null;
+  for (var i = 0, l = 100 * thousand; i < l; ++i)
+    result = [];
+  return result;
+});
+</script>
+
+<script type='example' name='Create 100k <div> elements'>
+benchmark(function () {
+  var result = null;
+  for (var i = 0, l = 100 * thousand; i < l; ++i)
+    result = document.createElement('div');
+  return result;
+});
+</script>
+
+<script type='example' name='Create 100k <iframe> elements'>
+benchmark(function () {
+  var result = null;
+  for (var i = 0, l = 100 * thousand; i < l; ++i)
+    result = document.createElement('iframe');
+  return result;
+});
+</script>
+
+<script type='example' name='Add 100k <div> elements to body online'>
+benchmark(function () {
+  var result = null;
+  var container = document.createElement('div');
+  document.body.appendChild(container);
+  for (var i = 0, l = 100 * thousand; i < l; ++i)
+    container.appendChild(document.createElement('div'));
+  document.body.removeChild(container);
+});
+</script>
+
+<script type='example' name='Add 100k <div> elements to body offline'>
+benchmark(function () {
+  var result = null;
+  var container = document.createElement('div');
+  for (var i = 0, l = 100 * thousand; i < l; ++i)
+    container.appendChild(document.createElement('div'));
+  document.body.appendChild(container);
+  document.body.removeChild(container);
 });
 </script>
 </div>
