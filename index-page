@@ -2115,7 +2115,7 @@ for (var xs = [], i = 0; i < 10 * million; ++i)
 })(0);
 </script>
 
-<script type='example' name='Integer closure(2) sum'>
+<script type='example' name='Integer linear closure(2) sum'>
 var total = 0;
 for (var xs = [], i = 0; i < 10 * million; ++i)
   xs.push(i & 3);
@@ -2174,7 +2174,7 @@ for (var xs = [], i = 0; i < 10 * million; ++i)
 </script>
 -->
 
-<script type='example' name='Integer closure(5) sum'>
+<script type='example' name='Integer linear closure(5) sum'>
 var total = 0;
 for (var xs = [], i = 0; i < 10 * million; ++i)
   xs.push(i & 3);
@@ -2197,6 +2197,106 @@ for (var xs = [], i = 0; i < 10 * million; ++i)
   })(0);
   return a;
 })(0);
+</script>
+
+<script type='example' name='Integer delayed linear closure(2) sum'>
+var total = 0;
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+(function () {
+  return benchmark(function () {
+    total = 0;
+    for (var i = 0, l = xs.length; i < l; ++i)
+      total += xs[i];
+    return total;
+  });
+})();
+</script>
+
+<script type='example' name='Integer delayed linear closure(3) sum'>
+var total = 0;
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+(function () {
+  return function () {
+    return benchmark(function () {
+      total = 0;
+      for (var i = 0, l = xs.length; i < l; ++i)
+        total += xs[i];
+      return total;
+    });
+  };
+})()();
+</script>
+
+<script type='example' name='Integer delayed linear closure(5) sum'>
+var total = 0;
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+(function () {
+  return function () {
+    return function () {
+      return function () {
+        return benchmark(function () {
+          total = 0;
+          for (var i = 0, l = xs.length; i < l; ++i)
+            total += xs[i];
+          return total;
+        });
+      };
+    };
+  };
+})()()()();
+</script>
+
+<script type='example' name='Integer delayed indirect closure(3) sum'>
+var total = 0;
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+var maybe = function (f) {
+  return Math.random() > 2 ? null['I hope not...'] : f;
+};
+
+(function () {
+  return maybe(function () {
+    return benchmark(function () {
+      total = 0;
+      for (var i = 0, l = xs.length; i < l; ++i)
+        total += xs[i];
+      return total;
+    });
+  });
+})()();
+</script>
+
+
+<script type='example' name='Integer delayed indirect closure(5) sum'>
+var total = 0;
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+var maybe = function (f) {
+  return Math.random() > 2 ? null['I hope not...'] : f;
+};
+
+(function () {
+  return maybe(function () {
+    return maybe(function () {
+      return maybe(function () {
+        return benchmark(function () {
+          total = 0;
+          for (var i = 0, l = xs.length; i < l; ++i)
+            total += xs[i];
+          return total;
+        });
+      });
+    });
+  });
+})()()()();
 </script>
 </div>
 
