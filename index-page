@@ -2300,6 +2300,312 @@ var maybe = function (f) {
 </script>
 </div>
 
+<div name='Parameter access'>
+<script type='example' name='Declared formal integers'>
+var add = function (x, y) {return x + y};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    total += add(i, 1 - i);
+});
+</script>
+
+<script type='example' name='Formal/indirect formal integers'>
+var add = function (x, y) {return x + arguments[1]};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    total += add(i, 1 - i);
+});
+</script>
+
+<script type='example' name='Formal/indirect implicit integers'>
+var add = function (x) {return x + arguments[1]};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    total += add(i, 1 - i);
+});
+</script>
+
+<script type='example' name='Implicit integers'>
+var add = function () {return arguments[0] + arguments[1]};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    total += add(i, 1 - i);
+});
+</script>
+
+<script type='example' name='Declared formal floats'>
+var add = function (x, y) {return x + y};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    total += add(i + 0.1, 1.1 - i);
+});
+</script>
+
+<script type='example' name='Formal/indirect formal floats'>
+var add = function (x, y) {return x + arguments[1]};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    total += add(i + 0.1, 1.1 - i);
+});
+</script>
+
+<script type='example' name='Formal/indirect implicit floats'>
+var add = function (x) {return x + arguments[1]};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    total += add(i + 0.1, 1.1 - i);
+});
+</script>
+
+<script type='example' name='Implicit floats'>
+var add = function () {return arguments[0] + arguments[1]};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    total += add(i + 0.1, 1.1 - i);
+});
+</script>
+</div>
+
+<div name='Function call forms'>
+<script type='example' name='Integer 1:1 formal/argument'>
+var add = function (x, y) {return x + y};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    total += add(i, 1 - i);
+});
+</script>
+
+<script type='example' name='Integer 1:1 formal/argument thiscall'>
+var add = function (x, y) {return x + y};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    total += add.call(this, i, 1 - i);
+});
+</script>
+
+<script type='example' name='Integer 1:1 formal/argument null this'>
+var add = function (x, y) {return x + y};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    total += add.call(null, i, 1 - i);
+});
+</script>
+
+<script type='example' name='Integer apply'>
+var add = function (x, y) {return x + y};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    total += add.apply(this, [i, 1 - i]);
+});
+</script>
+
+<script type='example' name='Integer apply null this'>
+var add = function (x, y) {return x + y};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    total += add.apply(null, [i, 1 - i]);
+});
+</script>
+
+<script type='example' name='Float 1:1 formal/argument'>
+var add = function (x, y) {return x + y};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    total += add(i + 0.1, 1.1 - i);
+});
+</script>
+
+<script type='example' name='Float 1:1 formal/argument thiscall'>
+var add = function (x, y) {return x + y};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    total += add.call(this, i + 0.1, 1.1 - i);
+});
+</script>
+
+<script type='example' name='Float 1:1 formal/argument null this'>
+var add = function (x, y) {return x + y};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    total += add.call(null, i + 0.1, 1.1 - i);
+});
+</script>
+
+<script type='example' name='Float apply'>
+var add = function (x, y) {return x + y};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    total += add.apply(this, [i + 0.1, 1.1 - i]);
+});
+</script>
+
+<script type='example' name='Float apply null this'>
+var add = function (x, y) {return x + y};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    total += add.apply(null, [i + 0.1, 1.1 - i]);
+});
+</script>
+
+<script type='example' name='Integer implicit this-boxing (direct)'>
+Number.prototype.plus = function (x) {
+  return +this + x;
+};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    total += i.plus(1 - i);
+});
+</script>
+
+<script type='example' name='Integer implicit this-boxing (indirect)'>
+var add = function (x) {
+  return +this + x;
+};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    total += add.call(i, 1 - i);
+});
+</script>
+
+<script type='example' name='Float implicit this-boxing (direct)'>
+Number.prototype.plus = function (x) {
+  return +this + x;
+};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    total += (i + 0.1).plus(1.1 - i);
+});
+</script>
+
+<script type='example' name='Float implicit this-boxing (indirect)'>
+var add = function (x) {
+  return +this + x;
+};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    total += add.call(i + 0.1, 1.1 - i);
+});
+</script>
+
+<script type='example' name='Forwarded integer formals'>
+var add = function (x, y) {return x + y};
+var add_forward = function () {
+  return add.apply(this, arguments);
+};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    total += add_forward(i, 1 - i);
+});
+</script>
+
+<script type='example' name='Explicitly forwarded integer formals'>
+var add = function (x, y) {return x + y};
+var add_forward = function (x, y) {
+  return add.call(this, x, y);
+};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    total += add_forward(i, 1 - i);
+});
+</script>
+
+<script type='example' name='Partialy forwarded integer formals'>
+var add = function (x, y) {return x + y};
+var add_forward = function (x, y) {
+  return add(x, y);
+};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    total += add_forward(i, 1 - i);
+});
+</script>
+
+<script type='example' name='Null-forwarded integer formals'>
+var add = function (x, y) {return x + y};
+var add_forward = function () {
+  return add.apply(null, arguments);
+};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    total += add_forward(i, 1 - i);
+});
+</script>
+
+<script type='example' name='Forwarded float formals'>
+var add = function (x, y) {return x + y};
+var add_forward = function () {
+  return add.apply(this, arguments);
+};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    total += add_forward(i + 0.1, 1.1 - i);
+});
+</script>
+
+<script type='example' name='Explicitly forwarded flaot formals'>
+var add = function (x, y) {return x + y};
+var add_forward = function (x, y) {
+  return add.call(this, x, y);
+};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    total += add_forward(i + 0.1, 1.1 - i);
+});
+</script>
+
+<script type='example' name='Partialy forwarded float formals'>
+var add = function (x, y) {return x + y};
+var add_forward = function (x, y) {
+  return add(x, y);
+};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    total += add_forward(i + 0.1, 1.1 - i);
+});
+</script>
+
+<script type='example' name='Null-forwarded float formals'>
+var add = function (x, y) {return x + y};
+var add_forward = function () {
+  return add.apply(null, arguments);
+};
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+    total += add_forward(i + 0.1, 1.1 - i);
+});
+</script>
+</div>
+
 <div name='L2 cache'>
 <script type='example' name='Sequential integer access'>
 for (var data = [], i = 0; i < 1 * million; ++i)
