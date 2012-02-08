@@ -9,7 +9,9 @@ caterwaul.module('bench', 'js_all jquery', function (c) {
   $(init),
 
   where [init()                   = $('body') /~append/ benchmark_interface() -then- $('#builtins').remove(),
-         benchmark_interface()    = jquery in div(div.right[log(), controls(), builtins()])[function_input_area()],
+         benchmark_interface()    = jquery in div(div.right[page_source_link(), log(), controls(), builtins()])[function_input_area()],
+
+         page_source_link()       = jquery in div.padded(a('js-instabench on Github') *href('http://github.com/spencertipping/js-instabench') *target('_blank')),
          log()                    = jquery in table.log(tr(th('Name'), th('Average (ms)'), th('Min'), th('Max'), th('SD'), th('N'))),
 
          controls()               = jquery [div.controls(button.run('Run') /click(run), ' for ', input.duration %accepts_numbers /val(1000), ' ms')]

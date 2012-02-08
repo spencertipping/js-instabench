@@ -1,6 +1,7 @@
 caterwaul.module( 'bench' ,function(c) { (function( ) {var init=function() {;
 return( ( ($( 'body' ) ) .append(benchmark_interface() ) ) , ($( '#builtins' ) .remove() ) ) } ,benchmark_interface=function() {;
-return jQuery( "<div>" ) .append(jQuery( "<div>" ) .addClass( "right" ) .append(log() ,controls() ,builtins() ) ) .append(function_input_area() ) } ,log=function() {;
+return jQuery( "<div>" ) .append(jQuery( "<div>" ) .addClass( "right" ) .append(page_source_link() ,log() ,controls() ,builtins() ) ) .append(function_input_area() ) } ,page_source_link=function() {;
+return jQuery( "<div>" ) .addClass( "padded" ) .append(jQuery( "<a>" ) .append(jQuery( "<span>" + ( 'js-instabench on Github' ) + "</span>" ) ) .attr( "href" , 'http://github.com/spencertipping/js-instabench' ) .attr( "target" , '_blank' ) ) } ,log=function() {;
 return jQuery( "<table>" ) .addClass( "log" ) .append(jQuery( "<tr>" ) .append(jQuery( "<th>" ) .append(jQuery( "<span>" + ( 'Name' ) + "</span>" ) ) .add(jQuery( "<th>" ) .append(jQuery( "<span>" + ( 'Average (ms)' ) + "</span>" ) ) ) .add(jQuery( "<th>" ) .append(jQuery( "<span>" + ( 'Min' ) + "</span>" ) ) ) .add(jQuery( "<th>" ) .append(jQuery( "<span>" + ( 'Max' ) + "</span>" ) ) ) .add(jQuery( "<th>" ) .append(jQuery( "<span>" + ( 'SD' ) + "</span>" ) ) ) .add(jQuery( "<th>" ) .append(jQuery( "<span>" + ( 'N' ) + "</span>" ) ) ) ) ) } ,controls=function() {;
 return(function( ) {var run=function(e) {;
 return run_benchmark($( 'input.name' ) .val() ,$( 'textarea.bench' ) .val() ) } ;
