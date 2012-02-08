@@ -298,7 +298,7 @@ return(result_23_Flfaon_RcgTWj29vkmAPhZ)}).call(this,new caterwaul.syntax("jQuer
 <script>
 caterwaul.module( 'bench' ,function(c) { (function( ) {var init=function() {;
 return( ( ($( 'body' ) ) .append(benchmark_interface() ) ) , ($( '#builtins' ) .remove() ) ) } ,benchmark_interface=function() {;
-return jQuery( "<div>" ) .append(jQuery( "<div>" ) .addClass( "right" ) .append(builtins() ,log() ,controls() ) ) .append(function_input_area() ) } ,log=function() {;
+return jQuery( "<div>" ) .append(jQuery( "<div>" ) .addClass( "right" ) .append(log() ,controls() ,builtins() ) ) .append(function_input_area() ) } ,log=function() {;
 return jQuery( "<table>" ) .addClass( "log" ) .append(jQuery( "<tr>" ) .append(jQuery( "<th>" ) .append(jQuery( "<span>" + ( 'Name' ) + "</span>" ) ) .add(jQuery( "<th>" ) .append(jQuery( "<span>" + ( 'Average (ms)' ) + "</span>" ) ) ) .add(jQuery( "<th>" ) .append(jQuery( "<span>" + ( 'Min' ) + "</span>" ) ) ) .add(jQuery( "<th>" ) .append(jQuery( "<span>" + ( 'Max' ) + "</span>" ) ) ) .add(jQuery( "<th>" ) .append(jQuery( "<span>" + ( 'SD' ) + "</span>" ) ) ) .add(jQuery( "<th>" ) .append(jQuery( "<span>" + ( 'N' ) + "</span>" ) ) ) ) ) } ,controls=function() {;
 return(function( ) {var run=function(e) {;
 return run_benchmark($( 'input.name' ) .val() ,$( 'textarea.bench' ) .val() ) } ;
@@ -1043,7 +1043,6 @@ var maybe = function (f) {
 })()();
 </script>
 
-
 <script type='example' name='Integer delayed indirect closure(5) sum'>
 var total = 0;
 for (var xs = [], i = 0; i < 10 * million; ++i)
@@ -1075,8 +1074,8 @@ var maybe = function (f) {
 var add = function (x, y) {return x + y};
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
-    total += add(i, 1 - i);
+  for (var total = 0, i = 0, l = 1 * million; i < l; ++i)
+    total += add(i + 1, 1 - i);
 });
 </script>
 
@@ -1084,8 +1083,8 @@ benchmark(function () {
 var add = function (x, y) {return x + arguments[1]};
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
-    total += add(i, 1 - i);
+  for (var total = 0, i = 0, l = 1 * million; i < l; ++i)
+    total += add(i + 1, 1 - i);
 });
 </script>
 
@@ -1093,8 +1092,8 @@ benchmark(function () {
 var add = function (x) {return x + arguments[1]};
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
-    total += add(i, 1 - i);
+  for (var total = 0, i = 0, l = 1 * million; i < l; ++i)
+    total += add(i + 1, 1 - i);
 });
 </script>
 
@@ -1102,8 +1101,8 @@ benchmark(function () {
 var add = function () {return arguments[0] + arguments[1]};
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
-    total += add(i, 1 - i);
+  for (var total = 0, i = 0, l = 1 * million; i < l; ++i)
+    total += add(i + 1, 1 - i);
 });
 </script>
 
@@ -1111,7 +1110,7 @@ benchmark(function () {
 var add = function (x, y) {return x + y};
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+  for (var total = 0, i = 0, l = 1 * million; i < l; ++i)
     total += add(i + 0.1, 1.1 - i);
 });
 </script>
@@ -1120,7 +1119,7 @@ benchmark(function () {
 var add = function (x, y) {return x + arguments[1]};
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+  for (var total = 0, i = 0, l = 1 * million; i < l; ++i)
     total += add(i + 0.1, 1.1 - i);
 });
 </script>
@@ -1129,7 +1128,7 @@ benchmark(function () {
 var add = function (x) {return x + arguments[1]};
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+  for (var total = 0, i = 0, l = 1 * million; i < l; ++i)
     total += add(i + 0.1, 1.1 - i);
 });
 </script>
@@ -1138,7 +1137,7 @@ benchmark(function () {
 var add = function () {return arguments[0] + arguments[1]};
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+  for (var total = 0, i = 0, l = 1 * million; i < l; ++i)
     total += add(i + 0.1, 1.1 - i);
 });
 </script>
@@ -1149,8 +1148,8 @@ benchmark(function () {
 var add = function (x, y) {return x + y};
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
-    total += add(i, 1 - i);
+  for (var total = 0, i = 0, l = 1 * million; i < l; ++i)
+    total += add(i + 1, 1 - i);
 });
 </script>
 
@@ -1158,8 +1157,8 @@ benchmark(function () {
 var add = function (x, y) {return x + y};
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
-    total += add.call(this, i, 1 - i);
+  for (var total = 0, i = 0, l = 1 * million; i < l; ++i)
+    total += add.call(this, i + 1, 1 - i);
 });
 </script>
 
@@ -1167,8 +1166,8 @@ benchmark(function () {
 var add = function (x, y) {return x + y};
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
-    total += add.call(null, i, 1 - i);
+  for (var total = 0, i = 0, l = 1 * million; i < l; ++i)
+    total += add.call(null, i + 1, 1 - i);
 });
 </script>
 
@@ -1176,8 +1175,8 @@ benchmark(function () {
 var add = function (x, y) {return x + y};
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
-    total += add.apply(this, [i, 1 - i]);
+  for (var total = 0, i = 0, l = 1 * million; i < l; ++i)
+    total += add.apply(this, [i + 1, 1 - i]);
 });
 </script>
 
@@ -1185,8 +1184,8 @@ benchmark(function () {
 var add = function (x, y) {return x + y};
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
-    total += add.apply(null, [i, 1 - i]);
+  for (var total = 0, i = 0, l = 1 * million; i < l; ++i)
+    total += add.apply(null, [i + 1, 1 - i]);
 });
 </script>
 
@@ -1194,7 +1193,7 @@ benchmark(function () {
 var add = function (x, y) {return x + y};
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+  for (var total = 0, i = 0, l = 1 * million; i < l; ++i)
     total += add(i + 0.1, 1.1 - i);
 });
 </script>
@@ -1203,7 +1202,7 @@ benchmark(function () {
 var add = function (x, y) {return x + y};
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+  for (var total = 0, i = 0, l = 1 * million; i < l; ++i)
     total += add.call(this, i + 0.1, 1.1 - i);
 });
 </script>
@@ -1212,7 +1211,7 @@ benchmark(function () {
 var add = function (x, y) {return x + y};
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+  for (var total = 0, i = 0, l = 1 * million; i < l; ++i)
     total += add.call(null, i + 0.1, 1.1 - i);
 });
 </script>
@@ -1221,7 +1220,7 @@ benchmark(function () {
 var add = function (x, y) {return x + y};
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+  for (var total = 0, i = 0, l = 1 * million; i < l; ++i)
     total += add.apply(this, [i + 0.1, 1.1 - i]);
 });
 </script>
@@ -1230,7 +1229,7 @@ benchmark(function () {
 var add = function (x, y) {return x + y};
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+  for (var total = 0, i = 0, l = 1 * million; i < l; ++i)
     total += add.apply(null, [i + 0.1, 1.1 - i]);
 });
 </script>
@@ -1241,7 +1240,7 @@ Number.prototype.plus = function (x) {
 };
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+  for (var total = 0, i = 0, l = 1 * million; i < l; ++i)
     total += i.plus(1 - i);
 });
 </script>
@@ -1252,8 +1251,8 @@ var add = function (x) {
 };
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
-    total += add.call(i, 1 - i);
+  for (var total = 0, i = 0, l = 1 * million; i < l; ++i)
+    total += add.call(i + 1, 1 - i);
 });
 </script>
 
@@ -1263,7 +1262,7 @@ Number.prototype.plus = function (x) {
 };
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+  for (var total = 0, i = 0, l = 1 * million; i < l; ++i)
     total += (i + 0.1).plus(1.1 - i);
 });
 </script>
@@ -1274,7 +1273,7 @@ var add = function (x) {
 };
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+  for (var total = 0, i = 0, l = 1 * million; i < l; ++i)
     total += add.call(i + 0.1, 1.1 - i);
 });
 </script>
@@ -1286,8 +1285,8 @@ var add_forward = function () {
 };
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
-    total += add_forward(i, 1 - i);
+  for (var total = 0, i = 0, l = 1 * million; i < l; ++i)
+    total += add_forward(i + 1, 1 - i);
 });
 </script>
 
@@ -1298,8 +1297,8 @@ var add_forward = function (x, y) {
 };
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
-    total += add_forward(i, 1 - i);
+  for (var total = 0, i = 0, l = 1 * million; i < l; ++i)
+    total += add_forward(i + 1, 1 - i);
 });
 </script>
 
@@ -1310,8 +1309,8 @@ var add_forward = function (x, y) {
 };
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
-    total += add_forward(i, 1 - i);
+  for (var total = 0, i = 0, l = 1 * million; i < l; ++i)
+    total += add_forward(i + 1, 1 - i);
 });
 </script>
 
@@ -1322,8 +1321,8 @@ var add_forward = function () {
 };
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
-    total += add_forward(i, 1 - i);
+  for (var total = 0, i = 0, l = 1 * million; i < l; ++i)
+    total += add_forward(i + 1, 1 - i);
 });
 </script>
 
@@ -1334,7 +1333,7 @@ var add_forward = function () {
 };
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+  for (var total = 0, i = 0, l = 1 * million; i < l; ++i)
     total += add_forward(i + 0.1, 1.1 - i);
 });
 </script>
@@ -1346,7 +1345,7 @@ var add_forward = function (x, y) {
 };
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+  for (var total = 0, i = 0, l = 1 * million; i < l; ++i)
     total += add_forward(i + 0.1, 1.1 - i);
 });
 </script>
@@ -1358,7 +1357,7 @@ var add_forward = function (x, y) {
 };
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+  for (var total = 0, i = 0, l = 1 * million; i < l; ++i)
     total += add_forward(i + 0.1, 1.1 - i);
 });
 </script>
@@ -1370,7 +1369,7 @@ var add_forward = function () {
 };
 
 benchmark(function () {
-  for (var total = 0, i = 0, l = 10 * million; i < l; ++i)
+  for (var total = 0, i = 0, l = 1 * million; i < l; ++i)
     total += add_forward(i + 0.1, 1.1 - i);
 });
 </script>
