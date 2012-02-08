@@ -2494,6 +2494,18 @@ benchmark(function () {
 });
 </script>
 
+<script type='example' name='While loop, reverse'>
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+benchmark(function () {
+  var total = 0, i = xs.length;
+  while (--i)
+    total += xs[i];
+  return total;
+});
+</script>
+
 <script type='example' name='While loop (uncached, independent pre-increment)'>
 for (var xs = [], i = 0; i < 10 * million; ++i)
   xs.push(i & 3);
