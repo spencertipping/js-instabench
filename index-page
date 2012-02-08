@@ -2328,6 +2328,17 @@ benchmark(function () {
 });
 </script>
 
+<script type='example' name='Canonical for-loop, FP loop index'>
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+benchmark(function () {
+  for (var total = 0, i = 0.0, l = xs.length; i < l; i += 1.0)
+    total += xs[i];
+  return total;
+});
+</script>
+
 <script type='example' name='Erroneous for-in loop'>
 for (var xs = [], i = 0; i < 10 * million; ++i)
   xs.push(i & 3);
