@@ -1064,6 +1064,97 @@ var maybe = function (f) {
 </script>
 </div>
 
+<div name='Decisionals'>
+<script type='example' name='If'>
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = xs.length; i < l; ++i)
+    if (i & 1) total += xs[i];
+  return total;
+});
+</script>
+
+<script type='example' name='Ternary over values'>
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = xs.length; i < l; ++i)
+    total += i & 1 ? xs[i] : 0;
+  return total;
+});
+</script>
+
+<script type='example' name='Ternary over side-effects'>
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = xs.length; i < l; ++i)
+    i & 1 ? total += xs[i] : null;
+  return total;
+});
+</script>
+
+<script type='example' name='Short-circuit && over values'>
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = xs.length; i < l; ++i)
+    total += i & 1 && xs[i];
+  return total;
+});
+</script>
+
+<script type='example' name='Short-circuit && over side-effects'>
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = xs.length; i < l; ++i)
+    i & 1 && (total += xs[i]);
+  return total;
+});
+</script>
+
+<script type='example' name='if/else'>
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = xs.length; i < l; ++i)
+    if (i & 1) total += xs[i];
+    else       total -= xs[i];
+  return total;
+});
+</script>
+
+<script type='example' name='Ternary over values'>
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = xs.length; i < l; ++i)
+    total += i & 1 ? xs[i] : -xs[i];
+  return total;
+});
+</script>
+
+<script type='example' name='Ternary over side-effects'>
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+benchmark(function () {
+  for (var total = 0, i = 0, l = xs.length; i < l; ++i)
+    i & 1 ? total += xs[i] : total -= xs[i];
+  return total;
+});
+</script>
+</div>
+
 <div name='Loop forms for arrays'>
 <script type='example' name='Canonical for-loop (uncached length)'>
 for (var xs = [], i = 0; i < 10 * million; ++i)
@@ -1199,6 +1290,20 @@ benchmark(function () {
 });
 </script>
 
+<script type='example' name='While-true loop (uncached, inline post-increment)'>
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+benchmark(function () {
+  var total = 0, i = 0;
+  while (true) {
+    if (i >= xs.length) break;
+    total += xs[i++];
+  }
+  return total;
+});
+</script>
+
 <script type='example' name='While loop (cached, independent pre-increment)'>
 for (var xs = [], i = 0; i < 10 * million; ++i)
   xs.push(i & 3);
@@ -1221,6 +1326,20 @@ benchmark(function () {
   var total = 0, i = 0, l = xs.length;
   while (i < l)
     total += xs[i++];
+  return total;
+});
+</script>
+
+<script type='example' name='While-true loop (cached, inline post-increment)'>
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+benchmark(function () {
+  var total = 0, i = 0, l = xs.length;
+  while (true) {
+    if (i >= l) break;
+    total += xs[i++];
+  }
   return total;
 });
 </script>
