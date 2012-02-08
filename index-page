@@ -2322,7 +2322,7 @@ for (var xs = [], i = 0; i < 10 * million; ++i)
   xs.push(i & 3);
 
 benchmark(function () {
-  for (var total = 0, i = xs.length - 1, i >= 0; --i)
+  for (var total = 0, i = xs.length - 1; i >= 0; --i)
     total += xs[i];
   return total;
 });
@@ -2333,6 +2333,7 @@ for (var xs = [], i = 0; i < 10 * million; ++i)
   xs.push(i & 3);
 
 benchmark(function () {
+  var total = 0;
   for (var i in xs)
     total += xs[i];
   return total;
@@ -2345,7 +2346,7 @@ for (var xs = [], i = 0; i < 10 * million; ++i)
 
 benchmark(function () {
   var total = 0;
-  for (var i = 0, l = xs.length >> 1; i < l; i += 2)
+  for (var i = 0, l = xs.length; i < l; i += 2)
     total += xs[i] + xs[i+1];
   return total;
 });
@@ -2357,7 +2358,7 @@ for (var xs = [], i = 0; i < 10 * million; ++i)
 
 benchmark(function () {
   var total = 0;
-  for (var i = 0, l = xs.length >> 2; i < l; i += 4)
+  for (var i = 0, l = xs.length; i < l; i += 4)
     total += xs[i] + xs[i+1] + xs[i+2] + xs[i+3];
   return total;
 });
@@ -2369,9 +2370,24 @@ for (var xs = [], i = 0; i < 10 * million; ++i)
 
 benchmark(function () {
   var total = 0;
-  for (var i = 0, l = xs.length >> 3; i < l; i += 8)
+  for (var i = 0, l = xs.length; i < l; i += 8)
     total += xs[i]   + xs[i+1] + xs[i+2] + xs[i+3] +
              xs[i+4] + xs[i+5] + xs[i+6] + xs[i+7];
+  return total;
+});
+</script>
+
+<script type='example' name='Canonical for-loop, unrolled 16x'>
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+benchmark(function () {
+  var total = 0;
+  for (var i = 0, l = xs.length; i < l; i += 16)
+    total += xs[i]    + xs[i+1]  + xs[i+2]  + xs[i+3] +
+             xs[i+4]  + xs[i+5]  + xs[i+6]  + xs[i+7] +
+             xs[i+8]  + xs[i+9]  + xs[i+10] + xs[i+11] +
+             xs[i+12] + xs[i+13] + xs[i+14] + xs[i+15];
   return total;
 });
 </script>
