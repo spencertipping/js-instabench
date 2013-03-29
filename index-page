@@ -2494,6 +2494,58 @@ benchmark(function () {
 });
 </script>
 
+<script type='example' name='Canonical for-loop, unrolled 2x incremental'>
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+benchmark(function () {
+  var total = 0;
+  for (var i = 0, l = xs.length; i < l;)
+    total += xs[i++] + xs[i++];
+  return total;
+});
+</script>
+
+<script type='example' name='Canonical for-loop, unrolled 4x incremental'>
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+benchmark(function () {
+  var total = 0;
+  for (var i = 0, l = xs.length; i < l;)
+    total += xs[i++] + xs[i++] + xs[i++] + xs[i++];
+  return total;
+});
+</script>
+
+<script type='example' name='Canonical for-loop, unrolled 8x incremental'>
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+benchmark(function () {
+  var total = 0;
+  for (var i = 0, l = xs.length; i < l;)
+    total += xs[i++] + xs[i++] + xs[i++] + xs[i++] +
+             xs[i++] + xs[i++] + xs[i++] + xs[i++];
+  return total;
+});
+</script>
+
+<script type='example' name='Canonical for-loop, unrolled 16x incremental'>
+for (var xs = [], i = 0; i < 10 * million; ++i)
+  xs.push(i & 3);
+
+benchmark(function () {
+  var total = 0;
+  for (var i = 0, l = xs.length; i < l;)
+    total += xs[i++] + xs[i++] + xs[i++] + xs[i++] +
+             xs[i++] + xs[i++] + xs[i++] + xs[i++] +
+             xs[i++] + xs[i++] + xs[i++] + xs[i++] +
+             xs[i++] + xs[i++] + xs[i++] + xs[i++];
+  return total;
+});
+</script>
+
 <script type='example' name='While loop, reverse'>
 for (var xs = [], i = 0; i < 10 * million; ++i)
   xs.push(i & 3);
@@ -4325,9 +4377,9 @@ caterwaul.module('bench', 'js_all jquery', function (c) {
                                     -where [lists()             = $('#builtins > div') *[jquery in div(h1.category /text(name) %toggles_contents + ul[items_for($(x))] /hide()), re [it[0]],
                                                                                          where [name = $(x).attr('name')]] -seq,
 
-                                            items_for(div)      = div.children('script') *+[jquery in li(a /text(name) %clickable /click(populate)), re [it[0]],
-                                                                                            where [name     = $(x).attr('name'),
-                                                                                                   populate = populator(name, $(x).text())]] -seq,
+                                            items_for(div)      = div.children('script') *[jquery in li(a /text(name) %clickable /click(populate)), re [it[0]],
+                                                                                           where [name     = $(x).attr('name'),
+                                                                                                  populate = populator(name, $(x).text())]] -seq,
 
                                             toggles_contents(e) = e.click("$(this).next().toggle()".qf).css({cursor: 'pointer'})],
 

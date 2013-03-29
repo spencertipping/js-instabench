@@ -25,9 +25,9 @@ caterwaul.module('bench', 'js_all jquery', function (c) {
                                     -where [lists()             = $('#builtins > div') *[jquery in div(h1.category /text(name) %toggles_contents + ul[items_for($(x))] /hide()), re [it[0]],
                                                                                          where [name = $(x).attr('name')]] -seq,
 
-                                            items_for(div)      = div.children('script') *+[jquery in li(a /text(name) %clickable /click(populate)), re [it[0]],
-                                                                                            where [name     = $(x).attr('name'),
-                                                                                                   populate = populator(name, $(x).text())]] -seq,
+                                            items_for(div)      = div.children('script') *[jquery in li(a /text(name) %clickable /click(populate)), re [it[0]],
+                                                                                           where [name     = $(x).attr('name'),
+                                                                                                  populate = populator(name, $(x).text())]] -seq,
 
                                             toggles_contents(e) = e.click("$(this).next().toggle()".qf).css({cursor: 'pointer'})],
 
